@@ -4,7 +4,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>umu.tds</groupId>
-	<artifactId>LoginRegistro</artifactId>
+	<artifactId>AppMusic</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
 	<dependencies>
@@ -15,28 +15,35 @@
 			<version>1.315</version>
 		</dependency>
 		<dependency>
-    <groupId>com.toedter</groupId>
-    <artifactId>jcalendar</artifactId>
-    <version>1.4</version>
-</dependency>
+    		<groupId>com.toedter</groupId>
+    		<artifactId>jcalendar</artifactId>
+    		<version>1.4</version>
+		</dependency>
 		<dependency>
-
-  <groupId>org.openjfx</groupId>
-
-  <artifactId>javafx-controls</artifactId>
-
-  <version>21.0.1</version>
-
-</dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-core</artifactId>
+			<version>2.3.0.1</version>
+		</dependency>
 		<dependency>
-
-  <groupId>org.openjfx</groupId>
-
-  <artifactId>javafx-media</artifactId>
-
-  <version>21</version>
-
-</dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-impl</artifactId>
+			<version>2.3.1</version>
+		</dependency>
+		<dependency>
+		  <groupId>org.openjfx</groupId>
+		  <artifactId>javafx-controls</artifactId>
+		  <version>21.0.1</version>
+		</dependency>
+		<dependency>
+		  <groupId>org.openjfx</groupId>
+		  <artifactId>javafx-media</artifactId>
+		  <version>21</version>
+		</dependency>
 	</dependencies>
 	
 	<build>

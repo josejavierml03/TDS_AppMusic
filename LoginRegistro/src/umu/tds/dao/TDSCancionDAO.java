@@ -28,11 +28,11 @@ public class TDSCancionDAO implements CancionDAO {
 	
 	private Cancion entidadToCancion(Entidad cancion) 
 	{
-		String titulo= servPersistencia.recuperarPropiedadEntidad(cancion, TITULO);
-		String ruta= servPersistencia.recuperarPropiedadEntidad(cancion, RUTA);
-		int repros= Integer.parseInt(servPersistencia.recuperarPropiedadEntidad(cancion, REPRODUCCIONES));
-		String interprete= servPersistencia.recuperarPropiedadEntidad(cancion, INTERPRETE);
-		String estilo= servPersistencia.recuperarPropiedadEntidad(cancion, ESTILO);
+		String titulo = servPersistencia.recuperarPropiedadEntidad(cancion, TITULO);
+		String ruta = servPersistencia.recuperarPropiedadEntidad(cancion, RUTA);
+		int repros = Integer.parseInt(servPersistencia.recuperarPropiedadEntidad(cancion, REPRODUCCIONES));
+		String interprete = servPersistencia.recuperarPropiedadEntidad(cancion, INTERPRETE);
+		String estilo = servPersistencia.recuperarPropiedadEntidad(cancion, ESTILO);
 		
 		Cancion c = new Cancion(titulo,ruta,interprete,estilo);
 		c.setNumRepros(repros);

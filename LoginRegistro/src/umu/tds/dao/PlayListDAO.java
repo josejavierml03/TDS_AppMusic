@@ -6,9 +6,9 @@ import umu.tds.dominio.PlayList;
 
 public interface PlayListDAO {
 	
-	void create(PlayList c);
-	boolean delete(PlayList c);
-	void update(PlayList c);
+	void create(PlayList pl);
+	boolean delete(PlayList pl);
+	void update(PlayList pl);
 	PlayList get(int id);
 	List<PlayList> getAll();
 	

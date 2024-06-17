@@ -1,6 +1,8 @@
 package umu.tds.controlador;
 
 import umu.tds.dao.UsuarioDAO;
+
+import java.time.LocalDate;
 import umu.tds.dao.DAOException;
 import umu.tds.dao.FactoriaDAO;
 import umu.tds.dominio.Usuario;
@@ -54,7 +56,7 @@ public enum Controlador {
 	}
 
 	public boolean registrarUsuario(String nombre, String apellidos, String email, String login, String password,
-			String fechaNacimiento) {
+			LocalDate fechaNacimiento) {
 
 		if (esUsuarioRegistrado(login))
 			return false;
@@ -79,15 +81,14 @@ public enum Controlador {
 		return true;
 	}
 	
-	public boolean usuarioPremium() 
+	public void usuarioPremium() 
 	{
 		usuarioActual.pago();
 		//Añadir playlist y actulizar en la bbdd el valor a premium
-		Boolean salida=usuarioActual.getPremium();
 		UsuarioDAO usuarioDAO = factoria
 				.getUsuarioDAO();
 		usuarioDAO.update(usuarioActual);
-		return salida;
+		
 	
 	}
 	

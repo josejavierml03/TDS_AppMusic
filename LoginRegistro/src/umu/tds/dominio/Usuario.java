@@ -1,18 +1,19 @@
 package umu.tds.dominio;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Usuario {
 	
-
 	private int id;
 	private String nombre;
 	private String apellidos;
 	private String email;
 	private String login;
 	private String password;
-	private String fechaNacimiento;
+	private LocalDate fechaNacimiento;
 	private Boolean premium;
 	private PlayList masRepro;
 	private List<PlayList> playlists;
@@ -20,7 +21,7 @@ public class Usuario {
 	private Descuento desc;
 
 	public Usuario(String nombre, String apellidos, String email, String login, String password,
-			String fechaNacimiento) {
+			LocalDate fechaNacimiento) {
 		this.id = 0;
 		this.nombre = nombre;
 		this.apellidos = apellidos;
@@ -35,9 +36,7 @@ public class Usuario {
 		
 	}
 	
-	//Añade la func crearmasrepro, get edad pero comentada por que el valor fecha sigue siendo un string y todavia no lo he cambiado , nombres listas y la de pdf
-	//pero no lo pongas en esta clase ponlo en umu.tds.services como una clase nueva. (Todas las funciones estan el git pa que las cambies un poco)
-	
+
 	public void addPL(PlayList pl) {
 		playlists.add(pl);
 	}
@@ -119,10 +118,11 @@ public class Usuario {
 	
 	public Descuento asignarDescuento() 
 	{
-		/*if (fechaNacimiento>65) desc=new DescuentoMayores();
-		else if (fechaNacimiento < 21) desc =new DescuentoJovenes();
-		else desc=null;*/
-		//Cambiar la fecha de nacimiento por un LocalDateTime
+		Period periodo = Period.between(fechaNacimiento, LocalDate.now());
+		int edad = periodo.getYears();
+		if (edad>65) desc=new DescuentoMayores();
+		else if (edad < 21) desc =new DescuentoJovenes();
+		else desc=null;
 		return null;
 	}
 	
@@ -174,11 +174,11 @@ public class Usuario {
 		this.password = password;
 	}
 
-	public String getFechaNacimiento() {
+	public LocalDate getFechaNacimiento() {
 		return fechaNacimiento;
 	}
 
-	public void setFechaNacimiento(String fechaNacimiento) {
+	public void setFechaNacimiento(LocalDate fechaNacimiento) {
 		this.fechaNacimiento = fechaNacimiento;
 	}
 

@@ -4,6 +4,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 
+@SuppressWarnings("serial")
 public class CargadorCanciones implements Serializable{
 
 	private static CargadorCanciones instancia;

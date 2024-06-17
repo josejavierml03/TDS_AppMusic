@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -263,9 +265,11 @@ public class RegistroView extends JDialog {
 							txtApellidos.getText(), 
 							txtEmail.getText(), 
 							txtUsuario.getText(),
-							new String(txtPassword.getPassword()), 
-							dateChooser.getDateFormatString()
+							new String(txtPassword.getPassword()),
+							dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault())
+                            .toLocalDate()
 					);
+				
 					if (registrado) {
 						JOptionPane.showMessageDialog(RegistroView.this, "Usuario registrado correctamente.", "Registro",
 								JOptionPane.INFORMATION_MESSAGE);

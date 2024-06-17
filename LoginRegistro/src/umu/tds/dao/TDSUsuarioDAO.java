@@ -1,6 +1,9 @@
 package umu.tds.dao;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -35,11 +38,10 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 	private static final String RECIENTES = "recientes";
 
 	private ServicioPersistencia servPersistencia;
-	private SimpleDateFormat dateFormat;
+	private DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
 	public TDSUsuarioDAO() {
 		servPersistencia = FactoriaServicioPersistencia.getInstance().getServicioPersistencia();
-		dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 	}
 
 	private Usuario entidadToUsuario(Entidad eUsuario) {
@@ -55,7 +57,9 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 		String premium = servPersistencia.recuperarPropiedadEntidad(eUsuario, PREMIUM);
 		listaCanciones = idtoCancion(servPersistencia.recuperarPropiedadEntidad(eUsuario,RECIENTES));
 		lista = idtoPlayList(servPersistencia.recuperarPropiedadEntidad(eUsuario,PLAYLISTS));
-		Usuario usuario = new Usuario(nombre, apellidos, email, login, password, fechaNacimiento);
+		LocalDate fechaD = LocalDate.parse(fechaNacimiento, dateFormat);
+		
+		Usuario usuario = new Usuario(nombre, apellidos, email, login, password, fechaD);
 		usuario.setId(eUsuario.getId());
 		if (premium != null) {
 			 if (premium.equals("true")) 
@@ -83,7 +87,7 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 		eUsuario.setPropiedades(new ArrayList<Propiedad>(Arrays.asList(new Propiedad(NOMBRE, usuario.getNombre()),
 				new Propiedad(APELLIDOS, usuario.getApellidos()), new Propiedad(EMAIL, usuario.getEmail()),
 				new Propiedad(LOGIN, usuario.getLogin()), new Propiedad(PASSWORD, usuario.getPassword()),
-				new Propiedad(FECHA_NACIMIENTO, usuario.getFechaNacimiento()),new Propiedad(PREMIUM,s),
+				new Propiedad(FECHA_NACIMIENTO, usuario.getFechaNacimiento().format(dateFormat)),new Propiedad(PREMIUM,s),
 				new Propiedad(RECIENTES,cancionToId(usuario.getRecientes())),new Propiedad(PLAYLISTS,playlistToId(usuario.getPlaylists())))));
 		return eUsuario;
 	}
@@ -147,7 +151,7 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 	 */
 	public void update(Usuario usuario) {
 		Entidad eUsuario = servPersistencia.recuperarEntidad(usuario.getId());
-		
+		String s;
 		for (Propiedad prop : eUsuario.getPropiedades()) {
 			if (prop.getNombre().equals(PASSWORD)) {
 				prop.setValor(usuario.getPassword());
@@ -160,12 +164,10 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 			} else if (prop.getNombre().equals(LOGIN)) {
 				prop.setValor(usuario.getLogin());
 			} else if (prop.getNombre().equals(FECHA_NACIMIENTO)) {
-				//prop.setValor(dateFormat.format(usuario.getFechaNacimiento()));
-				prop.setValor(usuario.getFechaNacimiento());
+				prop.setValor(usuario.getFechaNacimiento().format(dateFormat));
 			} else if (prop.getNombre().equals(PREMIUM)) {
-				String s;
-				if (usuario.getPremium()) {s="true";}
-				else {s="false";}
+				if (usuario.getPremium()) s = "true" ;
+				else s = "false" ;
 				prop.setValor(s);
 			}else if (prop.getNombre().equals(PLAYLISTS)) {
 				prop.setValor(cancionToId(usuario.getRecientes()));

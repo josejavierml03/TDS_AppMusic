@@ -595,7 +595,7 @@ public class VentanaPrincipal implements IEncendidoListener {
 		        cl.show(panel_3, "panel_5");
 		        tableModel.setRowCount(0);
 		        List<Cancion> canciones = new LinkedList<Cancion>();
-		        if (interprete.getText().equals("") && titulo.getText().equals("") && estilo.getSelectedItem().equals("-")) {
+		        if (interprete.getText().equals("") && titulo.getText().equals("") && estilo.getSelectedItem().equals("-") && !favoritas.isSelected()) {
 		            canciones = Controlador.INSTANCE.getAllCanciones();
 		        }else if (interprete.getText().equals("") && estilo.getSelectedItem().equals("-") && !favoritas.isSelected()) {
 		            canciones = Controlador.INSTANCE.getCancionesTitulo(titulo.getText());
@@ -624,7 +624,7 @@ public class VentanaPrincipal implements IEncendidoListener {
 		    public void actionPerformed(ActionEvent e) {
 		    	tableModel.setRowCount(0);
 		        List<Cancion> canciones = new LinkedList<Cancion>();
-		        if (interprete2.getText().equals("") && titulo2.getText().equals("") && estilo2.getSelectedItem().equals("-")) {
+		        if (interprete2.getText().equals("") && titulo2.getText().equals("") && estilo2.getSelectedItem().equals("-") && !favoritas2.isSelected()) {
 		            canciones = Controlador.INSTANCE.getAllCanciones();
 		        } else if (interprete2.getText().equals("") && estilo2.getSelectedItem().equals("-")&& !favoritas2.isSelected()) {
 		        	canciones = Controlador.INSTANCE.getCancionesTitulo(titulo2.getText());

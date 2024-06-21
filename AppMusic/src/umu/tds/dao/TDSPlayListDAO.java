@@ -32,6 +32,7 @@ public class TDSPlayListDAO implements PlayListDAO {
 		canciones = idtoCancion(servPersistencia.recuperarPropiedadEntidad(ePlayList,CANCIONES));
 		
 		PlayList pl = new PlayList (nombre);
+		pl.setId(ePlayList.getId());
 		canciones.stream().forEach(pl::añadirCancion);
 		return pl;
 	}
@@ -87,8 +88,9 @@ public class TDSPlayListDAO implements PlayListDAO {
 		for (Propiedad prop : ePlayList.getPropiedades()) {
 			if(prop.getNombre().equals(CANCIONES)) 
 			{
-				prop.setValor(cancionToId(pl.getCanciones()));
+				prop.setValor(String.valueOf(cancionToId(pl.getCanciones())));
 			}
+			servPersistencia.modificarPropiedad(prop);
 		}
 	}
 

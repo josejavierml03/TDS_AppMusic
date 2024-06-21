@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class Usuario {
 	
@@ -36,22 +38,6 @@ public class Usuario {
 		
 	}
 	
-
-	public void addPL(PlayList pl) {
-		playlists.add(pl);
-	}
-	
-	public PlayList buscarPL(String nombrePl) {
-
-		for(PlayList plBusqueda: playlists) {
-			if (plBusqueda.getNombre().equals(nombrePl)) 
-			{
-				return plBusqueda;
-			}
-		}
-		return null;
-	}
-	
 	public void addRecientes(Cancion c) 
 	{
 		if (recientes.contains(c)) 
@@ -65,40 +51,18 @@ public class Usuario {
 		recientes.add(0,c);
 	}
 	
-	public PlayList addC(Cancion c,String nombre) 
-	{
-		PlayList plBusqueda = this.buscarPL(nombre);
-		plBusqueda.añadirCancion(c);
-		return plBusqueda;
-		
+	public void addPL(PlayList lista) {
+		playlists.add(lista);
 	}
 	
-	public PlayList eliminarC(Cancion c,String nombre) 
+	public PlayList buscarPL(String titulo) 
 	{
-		PlayList plBusqueda = this.buscarPL(nombre);
-		plBusqueda.eliminarCancion(c);
-		return plBusqueda;
-		
+		Optional<PlayList> optionalPlaylist = playlists.stream()
+                .filter(pl -> pl.getNombre().equals(titulo))
+                .findFirst();
+		PlayList playlist = optionalPlaylist.orElse(null);
+		return playlist;
 	}
-	
-	public PlayList eliminarPL (String nombre) 
-	{
-		PlayList plBusqueda = this.buscarPL(nombre);
-		playlists.remove(plBusqueda);
-		return plBusqueda;
-	}
-	
-	public PlayList addPL (String nombre) 
-	{
-		if(buscarPL(nombre)!=null) 
-		{
-			PlayList pl = new PlayList(nombre);
-			playlists.add(pl);
-			return pl;
-		}
-		return null;
-	}
-	
 	public List<Cancion> cancionesLista (String nombre)
 	{
 		PlayList pl = this.buscarPL(nombre);
@@ -124,6 +88,61 @@ public class Usuario {
 		else if (edad < 21) desc =new DescuentoJovenes();
 		else desc=null;
 		return null;
+	}
+	
+	public PlayList crearPl(String titulo) 
+	{	
+		PlayList pla = buscarPL(titulo);
+		if (pla==null) 
+		{
+			PlayList pl = new PlayList(titulo);
+			playlists.add(pl);
+			return pl;
+		}
+		return null;
+		
+	}
+	
+	public PlayList eliminarPl(String titulo) 
+	{
+		PlayList playlist = buscarPL(titulo);
+		if (playlist!=null) 
+		{
+			playlists.remove(playlist);
+		}
+		return playlist;
+	}
+	
+	public PlayList addCancionToPl(String titulo, Cancion ca) 
+	{
+		PlayList pl = buscarPL(titulo);
+		pl.añadirCancion(ca);
+		return pl;
+	}
+	
+	public PlayList eliminarCancionToPl(String titulo, int id) 
+	{
+		PlayList pl = buscarPL(titulo);
+		pl.eliminarCancion(id);
+		return pl;
+	}
+	
+	public List<Cancion> obtenerCanciones(String titulo)
+	{
+		PlayList pl = buscarPL(titulo);
+		return pl.getCanciones();
+	}
+	
+	public List<String> nombrePl()
+	{
+		List<String> pl = getPlaylists().stream().map(p -> p.getNombre()).collect(Collectors.toList());
+		return pl;
+	}
+	
+	public List<Cancion> cancionesPl()
+	{
+		List<Cancion> canciones = getPlaylists().stream().flatMap(pl -> pl.getCanciones().stream()).collect(Collectors.toList());
+		return canciones;
 	}
 	
 	public int getId() {

@@ -22,12 +22,10 @@ public class PlayList {
 		}
 	}
 	
-	public void eliminarCancion(Cancion c) 
+	public void eliminarCancion(int id) 
 	{
-		if (canciones.contains(c)) 
-		{
-			canciones.remove(c);
-		}
+		canciones.removeIf(ca -> ca.getId() == id);
+		
 	}
 
 	public String getNombre() {

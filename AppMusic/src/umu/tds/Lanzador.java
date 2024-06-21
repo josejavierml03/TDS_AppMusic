@@ -1,6 +1,7 @@
 package umu.tds;
 
 import java.awt.EventQueue;
+import java.util.Optional;
 
 import umu.tds.gui.*;
 
@@ -14,6 +15,9 @@ public class Lanzador {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+				 int i = 0;
+			      Optional<Integer> tarjeta=Optional.ofNullable(null);
+			      tarjeta.ifPresentOrElse(ia -> ia.getClass(), () ->System.out.println("\nEl usuario no tiene descuento\r\n"));
 			}
 		});
 	}

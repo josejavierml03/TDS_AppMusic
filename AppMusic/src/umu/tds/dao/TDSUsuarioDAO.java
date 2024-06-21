@@ -119,6 +119,8 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 		 for (PlayList playlist : pl) {
 		 linea += playlist.getId() + " ";
 		 }
+			 
+		
 		 return linea.trim();
 	}
 	
@@ -170,9 +172,9 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 				else s = "false" ;
 				prop.setValor(s);
 			}else if (prop.getNombre().equals(PLAYLISTS)) {
-				prop.setValor(cancionToId(usuario.getRecientes()));
+				prop.setValor(String.valueOf(playlistToId(usuario.getPlaylists())));
 			} else if (prop.getNombre().equals(RECIENTES)) {
-				prop.setValor(playlistToId(usuario.getPlaylists()));
+				prop.setValor(String.valueOf(cancionToId(usuario.getRecientes())));
 			} 
 			servPersistencia.modificarPropiedad(prop);
 		}

@@ -2,23 +2,59 @@ package umu.tds.controlador;
 
 import umu.tds.dao.UsuarioDAO;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import umu.tds.componente.Canciones;
+import umu.tds.componente.CargadorCanciones;
+import umu.tds.componente.MapperCancionesXMLtoJava;
+import umu.tds.dao.CancionDAO;
 import umu.tds.dao.DAOException;
 import umu.tds.dao.FactoriaDAO;
+import umu.tds.dao.PlayListDAO;
 import umu.tds.dominio.Usuario;
+import umu.tds.dominio.Cancion;
+import umu.tds.dominio.PlayList;
+import umu.tds.dominio.RepositorioCanciones;
 import umu.tds.dominio.RepositorioUsuarios;
 
-public enum Controlador {
+public enum Controlador implements PropertyChangeListener {
 	INSTANCE;
 	private Usuario usuarioActual;
 	private FactoriaDAO factoria;
 	
+	private UsuarioDAO usuarioDAO;
+	private CancionDAO cancionDAO;
+	private PlayListDAO plDAO;
+	
+	private CargadorCanciones cargador;
+	
 	public static double precio=6;
-
+	
+	public void propertyChange(PropertyChangeEvent evento) 
+	{
+		Canciones canciones = MapperCancionesXMLtoJava.cargarCanciones(evento.getNewValue().toString());
+		for(umu.tds.componente.Cancion cancion: canciones.getCancion()) {
+			Cancion ca = new Cancion(cancion.getTitulo(), cancion.getURL(),cancion.getInterprete(), cancion.getEstilo() );
+			cancionDAO.create(ca);
+			RepositorioCanciones.INSTANCE.addCancion(ca);
+		}
+	}
+	
 	private Controlador() {
 		usuarioActual = null;
 		try {
 			factoria = FactoriaDAO.getInstancia();
+			cargador = CargadorCanciones.getUnicaInstancia();
+			cargador.addCancionChangeListener(this);
+			cancionDAO = factoria.getCancionDAO();
+			usuarioDAO = factoria.getUsuarioDAO();
+			plDAO = factoria.getPlayListDAO();
 		} catch (DAOException e) {
 			e.printStackTrace();
 		}
@@ -54,6 +90,64 @@ public enum Controlador {
 	{
 		return usuarioActual.getPremium();
 	}
+	
+	public void cargarCanciones(String fichero) 
+	{
+		cargador.setCancion(fichero);
+	}
+	
+	//public void reproducir () {}
+	//public void parar (){}
+	//public void siguente() {}
+	//public List<Cancion> recientes(){}
+	
+	public List<String> nombrePlayLists(){
+		return usuarioActual.nombrePl();
+	}
+	
+	public Boolean crearPl(String nombre){
+		PlayList pl = usuarioActual.crearPl(nombre);
+		if (pl!=null) 
+		{
+			plDAO.create(pl);
+			usuarioDAO.update(usuarioActual);
+			return true;
+		}
+		return false;
+	}
+	
+	public Boolean eliminarPl(String nombre) 
+	{
+		Boolean existe=false;
+		PlayList pl = usuarioActual.eliminarPl(nombre);
+		if (pl!=null) 
+		{
+			existe=true;
+			plDAO.delete(pl);
+			usuarioDAO.update(usuarioActual);
+			
+		}
+		return existe;
+	}
+	public void addCancionPl(String pl, Cancion ca)
+	{
+		PlayList lista = usuarioActual.addCancionToPl(pl, ca);
+		plDAO.update(lista);
+		
+	}
+	public void eliminarCancionPl(String pl, int id)
+	{
+		PlayList lista = usuarioActual.eliminarCancionToPl(pl,id);
+
+		plDAO.update(lista);
+	}
+	//public void PDF(){}
+	
+	public HashSet<String> estilos()
+	{
+		return RepositorioCanciones.INSTANCE.findEstilos();
+	}
+	
 
 	public boolean registrarUsuario(String nombre, String apellidos, String email, String login, String password,
 			LocalDate fechaNacimiento) {
@@ -61,20 +155,21 @@ public enum Controlador {
 		if (esUsuarioRegistrado(login))
 			return false;
 		Usuario usuario = new Usuario(nombre, apellidos, email, login, password, fechaNacimiento);
-
-		UsuarioDAO usuarioDAO = factoria
-				.getUsuarioDAO(); /* Adaptador DAO para almacenar el nuevo Usuario en la BD */
 		usuarioDAO.create(usuario);
 
 		RepositorioUsuarios.INSTANCE.addUsuario(usuario);
 		return true;
 	}
-
+	
+	public List<Cancion> cancionesPl(String titulo)
+	{
+		return usuarioActual.obtenerCanciones(titulo);
+	}
+	
 	public boolean borrarUsuario(Usuario usuario) {
 		if (!esUsuarioRegistrado(usuario.getLogin()))
 			return false;
 
-		UsuarioDAO usuarioDAO = factoria.getUsuarioDAO(); /* Adaptador DAO para borrar el Usuario de la BD */
 		usuarioDAO.delete(usuario);
 
 		RepositorioUsuarios.INSTANCE.removeUsuario(usuario);
@@ -85,12 +180,28 @@ public enum Controlador {
 	{
 		usuarioActual.pago();
 		//Añadir playlist y actulizar en la bbdd el valor a premium
-		UsuarioDAO usuarioDAO = factoria
-				.getUsuarioDAO();
 		usuarioDAO.update(usuarioActual);
 		
-	
 	}
 	
+	public List<Cancion> getAllCanciones(){
+		return RepositorioCanciones.INSTANCE.findAll();
+	}
+	
+	public List<Cancion> getCancionesTitulo(String titulo){
+		return RepositorioCanciones.INSTANCE.findTitulo(titulo);
+	}
+	
+	public List<Cancion> getCancionesTituloPl(String titulo)
+	{
+		List<Cancion> canciones = usuarioActual.cancionesPl();
+		return RepositorioCanciones.INSTANCE.findTituloyPlaylist(canciones,titulo);
+	}
+	
+	
+	public Cancion getCancionTituloInterpreteEstilo(String titulo,String interprete,String estilo) 
+	{
+		return RepositorioCanciones.INSTANCE.findCancionTiInEs(titulo, interprete, estilo);
+	}
 	
 }

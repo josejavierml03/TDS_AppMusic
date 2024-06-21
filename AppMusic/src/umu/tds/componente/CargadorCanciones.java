@@ -23,17 +23,17 @@ public class CargadorCanciones implements Serializable{
 		return instancia;
 	}
 	
-	public void setSueldo(String canciones) {
+	public void setCancion(String canciones) {
 		String oldCanciones = this.archivoCanciones;
 		this.archivoCanciones = canciones;
 		cancionesNuevas.firePropertyChange("archivoCanciones", oldCanciones, archivoCanciones);
 	}
 	
-	public void addSueldoChangeListener(PropertyChangeListener pcl) {
+	public void addCancionChangeListener(PropertyChangeListener pcl) {
 		cancionesNuevas.addPropertyChangeListener(pcl);
 	}
 	
-	public void removeSueldoChangeListener(PropertyChangeListener pcl) {
+	public void removeCancionChangeListener(PropertyChangeListener pcl) {
 		cancionesNuevas.removePropertyChangeListener(pcl);
 	} 
 }

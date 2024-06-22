@@ -118,7 +118,6 @@ public enum Controlador implements PropertyChangeListener {
 		Media media = new Media(url.toString());   
 		mediaPlayer = new MediaPlayer(media); 
 		mediaPlayer.play();
-		System.out.println(url);
 			
 		usuarioActual.addRecientes(cancion);	
 		usuarioDAO.update(usuarioActual);	

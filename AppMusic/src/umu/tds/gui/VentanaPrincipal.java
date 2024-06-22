@@ -60,6 +60,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -92,6 +93,7 @@ public class VentanaPrincipal implements IEncendidoListener {
 	private DefaultTableModel tableModel;
 	private Luz luz;
 	private JTextField anadirCancionPl;
+	private boolean plEliminada;
 
 	public VentanaPrincipal() {
 		initialize();
@@ -563,6 +565,7 @@ public class VentanaPrincipal implements IEncendidoListener {
 		anadirCancion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				boolean contiene = Controlador.INSTANCE.nombrePlayLists().contains(anadirCancionPl.getText());
+				int add=0;
 				if (!contiene) 
 				{
 					Controlador.INSTANCE.crearPl(anadirCancionPl.getText());
@@ -579,11 +582,23 @@ public class VentanaPrincipal implements IEncendidoListener {
                     			.anyMatch(c -> c.getTitulo().equals(ca.getTitulo()) && c.getEstilo().equals(ca.getEstilo()) && c.getInterprete().equals(ca.getInterprete()));
                     	if (!contieneCancion) {
                     		Controlador.INSTANCE.addCancionPl(anadirCancionPl.getText(), ca);
+                    		add++;
+                    		if (add == 1) {
+                    		JOptionPane.showMessageDialog(frmVentanaPrincipal, add + " cancion añadida", "PlayList",
+            						JOptionPane.INFORMATION_MESSAGE);
+                    		}else { 
+                    			JOptionPane.showMessageDialog(frmVentanaPrincipal, add + " canciones añadidas", "PlayList",
+                						JOptionPane.INFORMATION_MESSAGE);
+                    		}
                     	}
 	                }
 	           }
-			   JOptionPane.showMessageDialog(frmVentanaPrincipal, "Canciones añadidas", "PlayList",
-						JOptionPane.INFORMATION_MESSAGE);
+			   if (add==0) 
+			   {
+				   JOptionPane.showMessageDialog(frmVentanaPrincipal, "No se han añadido canciones", "PlayList",
+   						JOptionPane.INFORMATION_MESSAGE);
+			   }
+			   
 			}
 		});
 		
@@ -638,13 +653,19 @@ public class VentanaPrincipal implements IEncendidoListener {
 				{
 					JOptionPane.showMessageDialog(frmVentanaPrincipal, "PlayList Eliminada", "PlayList",
 							JOptionPane.INFORMATION_MESSAGE);
+					String plEliminar = tituloPl.getText();
+					for (int i = 0; i < modeloLista.size(); i++) {
+	                    if (modeloLista.getElementAt(i).equals(plEliminar)) {
+	                    	modeloLista.remove(i);
+	                        i--;
+	                    }
+	                }
 				}
 				else 
 				{
 					JOptionPane.showMessageDialog(frmVentanaPrincipal, "PlayList no existente", "Error",
 							JOptionPane.WARNING_MESSAGE);
 				}
-			
 			}
 		});
 		
@@ -773,22 +794,31 @@ public class VentanaPrincipal implements IEncendidoListener {
 		});
 		
 		eliminarLista.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (!tituloPl.getText().equals("")) {
-					for (int row = 0; row < table_1.getRowCount(); row++) {
-						Boolean value = (Boolean) table_1.getValueAt(row, 3);
-                    	if (value) {
-                    		String[] rowD = new String[tableModel1.getColumnCount()];
-                    		for (int i = 0; i < tableModel1.getColumnCount()-1; i++) {
-                    			rowD[i] = (String) table_1.getValueAt(row, i);
-                    		}
-                    		Cancion ca = Controlador.INSTANCE.getCancionTituloInterpreteEstilo(rowD[0],rowD[1],rowD[2]);
-                    		Controlador.INSTANCE.eliminarCancionPl(tituloPl.getText(), ca.getId());
-                    	}
-					}	
-				}
-			}
+		    public void actionPerformed(ActionEvent e) {
+		        if (!tituloPl.getText().equals("")) {
+		            ArrayList<Integer> filasEliminar = new ArrayList<>();
+
+		            for (int row = 0; row < table_1.getRowCount(); row++) {
+		                Boolean value = (Boolean) table_1.getValueAt(row, 3);
+		                if (value) {
+		                    String[] rowD = new String[tableModel1.getColumnCount()];
+		                    for (int i = 0; i < tableModel1.getColumnCount() - 1; i++) {
+		                        rowD[i] = (String) table_1.getValueAt(row, i);
+		                    }
+		                    Cancion ca = Controlador.INSTANCE.getCancionTituloInterpreteEstilo(rowD[0], rowD[1], rowD[2]);
+		                    Controlador.INSTANCE.eliminarCancionPl(tituloPl.getText(), ca.getId());
+
+		                    filasEliminar.add(row);
+		                }
+		            }
+
+		            for (int i = filasEliminar.size() - 1; i >= 0; i--) {
+		                tableModel1.removeRow(filasEliminar.get(i));
+		            }
+		        }
+		    }
 		});
+
 
 		recientes.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -812,10 +842,11 @@ public class VentanaPrincipal implements IEncendidoListener {
                     	JOptionPane.showMessageDialog(frmVentanaPrincipal, "No hay canciones en la playlist", "PlayList",
     							JOptionPane.WARNING_MESSAGE);
                     }
-                    for (Cancion cancion : canciones) {
-    		            Object[] rowData = { cancion.getTitulo(), cancion.getInterprete(), cancion.getEstilo(), false };
-    		            tableModel2.addRow(rowData);
+                   	for (Cancion cancion : canciones) {
+    		           	Object[] rowData = { cancion.getTitulo(), cancion.getInterprete(), cancion.getEstilo(), false };
+    		           	tableModel2.addRow(rowData);
     		        }  
+                    
                 }
 				tableModel2.fireTableDataChanged(); 
 			}

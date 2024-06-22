@@ -9,9 +9,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -116,11 +114,11 @@ public enum Controlador implements PropertyChangeListener {
 	
 	public void reproducirCancion(Cancion cancion) throws MalformedURLException {	
 		
-		String urla = new File(cancion.getRuta()).toURI().toString().replaceFirst(".*?(https)", "https");
-		URL url = new URL(urla);
+		URL url = new URL(cancion.getRuta());
 		Media media = new Media(url.toString());   
 		mediaPlayer = new MediaPlayer(media); 
 		mediaPlayer.play();
+		System.out.println(url);
 			
 		usuarioActual.addRecientes(cancion);	
 		usuarioDAO.update(usuarioActual);	

@@ -5,11 +5,14 @@ import umu.tds.dao.UsuarioDAO;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
+
+import com.itextpdf.text.DocumentException;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -179,7 +182,13 @@ public enum Controlador implements PropertyChangeListener {
 
 		plDAO.update(lista);
 	}
-	//public void PDF(){}
+	public Boolean PDF(String ruta) throws FileNotFoundException, DocumentException
+	{
+		if (usuarioActual.pdf(ruta)!=null) {
+			return true;
+		}
+		return false;
+	}
 	
 	public HashSet<String> estilos()
 	{

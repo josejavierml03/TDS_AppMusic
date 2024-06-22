@@ -1,11 +1,20 @@
 package umu.tds.dominio;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.ListItem;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 
 public class Usuario {
 	
@@ -143,6 +152,40 @@ public class Usuario {
 	{
 		List<Cancion> canciones = getPlaylists().stream().flatMap(pl -> pl.getCanciones().stream()).collect(Collectors.toList());
 		return canciones;
+	}
+	
+	public Document pdf(String ruta) throws FileNotFoundException, DocumentException {
+	    if (premium && !playlists.isEmpty()) {
+	        FileOutputStream archivo = new FileOutputStream(ruta + "/canciones.pdf");
+	        Document documento = new Document();
+	        PdfWriter.getInstance(documento, archivo);
+	        documento.open();
+
+	        Font titleFont = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD);
+	        Paragraph titulo = new Paragraph("Listado de Playlists y Canciones", titleFont);
+	        titulo.setAlignment(Element.ALIGN_CENTER);
+	        documento.add(titulo);
+
+	        Font userFont = new Font(Font.FontFamily.HELVETICA, 14, Font.NORMAL);
+	        Paragraph usuario = new Paragraph("Usuario " + login, userFont);
+	        documento.add(usuario);
+
+	        for (PlayList p : playlists) {
+	            Font playlistFont = new Font(Font.FontFamily.HELVETICA, 16, Font.BOLD);
+	            Paragraph nombrePlaylist = new Paragraph("PlayList " + p.getNombre(), playlistFont);
+	            documento.add(nombrePlaylist);
+
+	            List<Cancion> canciones = p.getCanciones();
+	            Font cancionFont = new Font(Font.FontFamily.HELVETICA, 14, Font.NORMAL);
+	            for (Cancion c : canciones) {
+	            	documento.add(new Paragraph("Cancion "+ c.getTitulo(),cancionFont));
+	            }
+	        }
+
+	        documento.close();
+	        return documento;
+	    }
+	    return null;
 	}
 	
 	public int getId() {

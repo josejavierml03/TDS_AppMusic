@@ -49,6 +49,8 @@ import javax.swing.table.TableCellRenderer;
 
 import org.kohsuke.github.GHCommit.File;
 
+import com.itextpdf.text.DocumentException;
+
 import umu.tds.controlador.Controlador;
 import umu.tds.dominio.Cancion;
 
@@ -56,6 +58,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.util.EventObject;
 import java.util.HashSet;
@@ -193,15 +196,15 @@ public class VentanaPrincipal implements IEncendidoListener {
 		Component verticalStrut_11 = Box.createVerticalStrut(20);
 		verticalBox.add(verticalStrut_11);
 
-		JButton btnNewButton_17 = new JButton("PDF");
-		btnNewButton_17.setAlignmentX(Component.CENTER_ALIGNMENT);
-		verticalBox.add(btnNewButton_17);
+		JButton pdfCreador = new JButton("PDF");
+		pdfCreador.setAlignmentX(Component.CENTER_ALIGNMENT);
+		verticalBox.add(pdfCreador);
 		if (Controlador.INSTANCE.comprobarPremium()) {
 			masReproducidas.setEnabled(true);
-			btnNewButton_17.setEnabled(true);
+			pdfCreador.setEnabled(true);
 		} else {
 			masReproducidas.setEnabled(false);
-			btnNewButton_17.setEnabled(false);
+			pdfCreador.setEnabled(false);
 		}
 
 		Component verticalStrut_12 = Box.createVerticalStrut(20);
@@ -676,6 +679,28 @@ public class VentanaPrincipal implements IEncendidoListener {
 		    }
 		});
 		
+		pdfCreador.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser seleccionado = new JFileChooser();
+				seleccionado.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				int resultado =seleccionado.showOpenDialog(frmVentanaPrincipal);
+				if (resultado == JFileChooser.APPROVE_OPTION) {
+					java.io.File carpeta = seleccionado.getSelectedFile();
+					String ruta = carpeta.getAbsolutePath();
+					try {
+						if (!Controlador.INSTANCE.PDF(ruta)) 
+						{
+							JOptionPane.showMessageDialog(frmVentanaPrincipal, "Directorio no existe o No existen Playlists", "Error",
+									JOptionPane.WARNING_MESSAGE);
+						}
+					} catch (FileNotFoundException e1) {
+						e1.printStackTrace();
+					} catch (DocumentException e1) {
+						e1.printStackTrace();
+					}
+				}
+			}
+		});
 		buscar2.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		    	tableModel.setRowCount(0);
@@ -804,7 +829,10 @@ public class VentanaPrincipal implements IEncendidoListener {
 					pr.mostrarVentana();
 					frmVentanaPrincipal.dispose();
 				}
-
+				else {
+					JOptionPane.showMessageDialog(frmVentanaPrincipal, "Ya eres Premium", "Error",
+							JOptionPane.WARNING_MESSAGE);
+				}
 			}
 		});
 

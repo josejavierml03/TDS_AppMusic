@@ -7,19 +7,23 @@ import java.util.stream.Collectors;
 
 import org.h2.command.dml.Set;
 
+import umu.tds.dao.CancionDAO;
 import umu.tds.dao.DAOException;
 import umu.tds.dao.FactoriaDAO;
+import umu.tds.dao.TDSCancionDAO;
 
 public enum RepositorioCanciones {
 INSTANCE;
 	private FactoriaDAO factoria;
 	
 	private List<Cancion> canciones;
+	private CancionDAO cancionDAO;
 	
 	private RepositorioCanciones (){
 		canciones = new LinkedList<Cancion>();	
 		try {
 			factoria = FactoriaDAO.getInstancia();
+			cancionDAO = factoria.getCancionDAO();
 			List<Cancion> ca = new LinkedList<Cancion>(factoria.getCancionDAO().getAll());
 			ca.stream().forEach(c->addCancion(c));
 			
@@ -39,6 +43,20 @@ INSTANCE;
 	
 	public void removeCancion(Cancion ca) {
 		canciones.remove(ca);
+	}
+	
+public void reproducida(Cancion c) {
+		
+		Cancion cancion = c;
+		for(Cancion ca: canciones) {
+			if(ca.getId() == c.getId()) {
+				cancion = ca;
+				break;
+			}
+		}
+		
+		cancion.reproducida();
+		cancionDAO.update(cancion);
 	}
 	
 	public List<Cancion> findAll() {

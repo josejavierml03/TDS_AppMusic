@@ -4,12 +4,16 @@ import umu.tds.dao.UsuarioDAO;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import umu.tds.componente.Canciones;
 import umu.tds.componente.CargadorCanciones;
 import umu.tds.componente.MapperCancionesXMLtoJava;
@@ -34,6 +38,8 @@ public enum Controlador implements PropertyChangeListener {
 	
 	private CargadorCanciones cargador;
 	
+	private MediaPlayer mediaPlayer;
+	
 	public static double precio=6;
 	
 	public void propertyChange(PropertyChangeEvent evento) 
@@ -55,6 +61,7 @@ public enum Controlador implements PropertyChangeListener {
 			cancionDAO = factoria.getCancionDAO();
 			usuarioDAO = factoria.getUsuarioDAO();
 			plDAO = factoria.getPlayListDAO();
+			activarReproductor(); 
 		} catch (DAOException e) {
 			e.printStackTrace();
 		}
@@ -96,9 +103,41 @@ public enum Controlador implements PropertyChangeListener {
 		cargador.setCancion(fichero);
 	}
 	
-	//public void reproducir () {}
-	//public void parar (){}
-	//public void siguente() {}
+	private void activarReproductor() {
+		try {
+			com.sun.javafx.application.PlatformImpl.startup(() -> {
+			});
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			System.out.println("Exception: " + ex.getMessage());
+		}
+	}
+	
+		public void reproducirCancion(Cancion cancion) throws MalformedURLException {
+			
+			URL url = new URL(cancion.getRuta());
+			Media media = new Media(url.toString());   
+			mediaPlayer = new MediaPlayer(media); 
+			mediaPlayer.play();
+			
+			usuarioActual.addRecientes(cancion);	
+			usuarioDAO.update(usuarioActual);	
+			RepositorioCanciones.INSTANCE.reproducida(cancion);	
+	
+	}
+	
+	public void pausarCancion() {
+		mediaPlayer.pause();
+	}
+	
+	public void reanudarCancion() {
+		mediaPlayer.play();
+	}
+	
+	public void pararCancion() {
+		mediaPlayer.stop();
+	}
+	
 	//public List<Cancion> recientes(){}
 	
 	public List<String> nombrePlayLists(){

@@ -18,6 +18,10 @@ public class Cancion {
 		this.estilo = estilo;
 	}
 	
+	public void reproducida() {
+		numRepros++;
+	}
+	
 	public String getTitulo() {
 		return titulo;
 	}
@@ -52,7 +56,7 @@ public class Cancion {
 	public int getId() {
 		return id;
 	}
-
+	
 	public void setId(int id) {
 		this.id = id;
 	}

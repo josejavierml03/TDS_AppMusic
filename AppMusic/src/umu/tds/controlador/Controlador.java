@@ -4,6 +4,7 @@ import umu.tds.dao.UsuarioDAO;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -113,16 +114,17 @@ public enum Controlador implements PropertyChangeListener {
 		}
 	}
 	
-		public void reproducirCancion(Cancion cancion) throws MalformedURLException {
+	public void reproducirCancion(Cancion cancion) throws MalformedURLException {	
+		
+		String urla = new File(cancion.getRuta()).toURI().toString().replaceFirst(".*?(https)", "https");
+		URL url = new URL(urla);
+		Media media = new Media(url.toString());   
+		mediaPlayer = new MediaPlayer(media); 
+		mediaPlayer.play();
 			
-			URL url = new URL(cancion.getRuta());
-			Media media = new Media(url.toString());   
-			mediaPlayer = new MediaPlayer(media); 
-			mediaPlayer.play();
-			
-			usuarioActual.addRecientes(cancion);	
-			usuarioDAO.update(usuarioActual);	
-			RepositorioCanciones.INSTANCE.reproducida(cancion);	
+		usuarioActual.addRecientes(cancion);	
+		usuarioDAO.update(usuarioActual);	
+		RepositorioCanciones.INSTANCE.reproducida(cancion);	
 	
 	}
 	

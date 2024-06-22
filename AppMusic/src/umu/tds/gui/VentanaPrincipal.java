@@ -56,6 +56,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.net.MalformedURLException;
 import java.util.EventObject;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -87,6 +88,7 @@ public class VentanaPrincipal implements IEncendidoListener {
 	public static String rutaSiguente = "/umu/tds/imagenes/siguente.png";
 	private DefaultTableModel tableModel;
 	private Luz luz;
+	private JTextField anadirCancionPl;
 
 	public VentanaPrincipal() {
 		initialize();
@@ -395,8 +397,24 @@ public class VentanaPrincipal implements IEncendidoListener {
 		Component horizontalStrut = Box.createHorizontalStrut(20);
 		horizontalBox_1.add(horizontalStrut);
 
-		JButton btnNewButton_8 = new JButton("Añadir lista");
-		horizontalBox_1.add(btnNewButton_8);
+		JButton anadirCancion = new JButton("Añadir lista");
+		horizontalBox_1.add(anadirCancion);
+		
+		Component verticalStrut_13 = Box.createVerticalStrut(20);
+		verticalBox_3.add(verticalStrut_13);
+		
+		Box verticalBox_8 = Box.createVerticalBox();
+		verticalBox_3.add(verticalBox_8);
+		
+		Box horizontalBox_5 = Box.createHorizontalBox();
+		verticalBox_8.add(horizontalBox_5);
+		
+		JLabel lblNewLabel_2 = new JLabel("PlayList");
+		horizontalBox_5.add(lblNewLabel_2);
+		
+		anadirCancionPl = new JTextField();
+		verticalBox_3.add(anadirCancionPl);
+		anadirCancionPl.setColumns(10);
 
 		JPanel panel_10 = new JPanel();
 		panel_3.add(panel_10, "panel_10");
@@ -480,15 +498,26 @@ public class VentanaPrincipal implements IEncendidoListener {
 
 		Component verticalStrut_9 = Box.createVerticalStrut(20);
 		verticalBox_7.add(verticalStrut_9);
+		DefaultTableModel tableModel2 = new DefaultTableModel(columnNames, 0) {
+		    /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 
+			@Override
+		    public Class<?> getColumnClass(int columnIndex) {
+		        if (columnIndex == 3) {
+		            return Boolean.class;
+		        }
+		        return String.class;
+		    }
+		};
 		
-		table_2 = new JTable();
+		table_2 = new JTable(tableModel2);
 		table_2.setBorder(new LineBorder(new Color(0, 0, 0)));
-		table_2.setModel(new DefaultTableModel(
-				new Object[][] { { null, null, null, null }, { null, null, null, null }, { null, null, null, null },
-						{ null, null, null, null }, },
-				new String[] { "New column", "New column", "New column", "New column" }));
-		table_2.setSurrendersFocusOnKeystroke(true);
+		table_2.getColumnModel().getColumn(3).setCellRenderer(new CheckBoxRenderer());
+		table_2.getColumnModel().getColumn(3).setCellEditor(new DefaultCellEditor(new JCheckBox()));
+		
 		verticalBox_7.add(table_2);
 
 		Component verticalStrut_10 = Box.createVerticalStrut(20);
@@ -525,6 +554,33 @@ public class VentanaPrincipal implements IEncendidoListener {
 				    estilo2.addItem(es);
 				}
 				
+			}
+		});
+		
+		anadirCancion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				boolean contiene = Controlador.INSTANCE.nombrePlayLists().contains(anadirCancionPl.getText());
+				if (!contiene) 
+				{
+					Controlador.INSTANCE.crearPl(anadirCancionPl.getText());
+				}
+				for (int row = 0; row < table.getRowCount(); row++) {
+					Boolean value = (Boolean) table.getValueAt(row, 3);
+	                if (value) {
+	                	String[] rowD = new String[tableModel1.getColumnCount()];
+	                	for (int i = 0; i < tableModel1.getColumnCount()-1; i++) {
+                    		rowD[i] = (String) table.getValueAt(row, i);
+                    	}
+                    	Cancion ca = Controlador.INSTANCE.getCancionTituloInterpreteEstilo(rowD[0],rowD[1],rowD[2]);
+                    	boolean contieneCancion = Controlador.INSTANCE.cancionesPl(anadirCancionPl.getText()).stream()
+                    			.anyMatch(c -> c.getTitulo().equals(ca.getTitulo()) && c.getEstilo().equals(ca.getEstilo()) && c.getInterprete().equals(ca.getInterprete()));
+                    	if (!contieneCancion) {
+                    		Controlador.INSTANCE.addCancionPl(anadirCancionPl.getText(), ca);
+                    	}
+	                }
+	           }
+			   JOptionPane.showMessageDialog(frmVentanaPrincipal, "Canciones añadidas", "PlayList",
+						JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 		
@@ -602,7 +658,7 @@ public class VentanaPrincipal implements IEncendidoListener {
 		        }else if (interprete.getText().equals("") && estilo2.getSelectedItem().equals("-") && favoritas.isSelected()) {
 		        	canciones = Controlador.INSTANCE.getCancionesTituloPl(titulo.getText());
 		        }
-
+		 
 		        for (Cancion cancion : canciones) {
 		            Object[] rowData = { cancion.getTitulo(), cancion.getInterprete(), cancion.getEstilo(), false };
 		            tableModel.addRow(rowData);
@@ -631,7 +687,6 @@ public class VentanaPrincipal implements IEncendidoListener {
 		        } else if (interprete2.getText().equals("") && estilo2.getSelectedItem().equals("-") && favoritas2.isSelected()) {
 		        	canciones = Controlador.INSTANCE.getCancionesTituloPl(titulo2.getText());
 		        }
-		        
 		        for (Cancion cancion : canciones) {
 		            Object[] rowData = { cancion.getTitulo(), cancion.getInterprete(), cancion.getEstilo(), false };
 		            tableModel.addRow(rowData);
@@ -722,6 +777,22 @@ public class VentanaPrincipal implements IEncendidoListener {
 			public void mouseClicked(MouseEvent e) {
 				CardLayout cl = (CardLayout) (panel_3.getLayout());
 				cl.show(panel_3, "panel_11");
+				tableModel2.setRowCount(0);
+				if (e.getClickCount() == 1) {
+                    int index = lista.locationToIndex(e.getPoint());
+                    String playlist = lista.getModel().getElementAt(index);
+                    List<Cancion> canciones = Controlador.INSTANCE.cancionesPl(playlist);
+                    if (canciones.size()==0) 
+                    {
+                    	JOptionPane.showMessageDialog(frmVentanaPrincipal, "No hay canciones en la playlist", "PlayList",
+    							JOptionPane.WARNING_MESSAGE);
+                    }
+                    for (Cancion cancion : canciones) {
+    		            Object[] rowData = { cancion.getTitulo(), cancion.getInterprete(), cancion.getEstilo(), false };
+    		            tableModel2.addRow(rowData);
+    		        }  
+                }
+				tableModel2.fireTableDataChanged(); 
 			}
 		});
 

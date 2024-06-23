@@ -42,7 +42,7 @@ public enum Controlador implements PropertyChangeListener {
 	
 	private MediaPlayer mediaPlayer;
 	
-	public static double precio=6;
+	public static double precio = 6;
 	
 	public void propertyChange(PropertyChangeEvent evento) 
 	{
@@ -81,6 +81,13 @@ public enum Controlador implements PropertyChangeListener {
 		Usuario usuario = RepositorioUsuarios.INSTANCE.findUsuario(nombre);
 		if (usuario != null && usuario.getPassword().equals(password)) {
 			this.usuarioActual = usuario;
+			if (!usuarioActual.getPremium()) 
+			{
+				usuarioActual.asignarDescuento();
+			}
+			else {
+				//añadir ventajas premium
+			}
 			return true;
 		}
 		return false;
@@ -90,6 +97,13 @@ public enum Controlador implements PropertyChangeListener {
 		Usuario usuario = RepositorioUsuarios.INSTANCE.findUsuario(nombre);
 		if (usuario != null) {
 			this.usuarioActual = usuario;
+			if (!usuarioActual.getPremium()) 
+			{
+				usuarioActual.asignarDescuento();
+			}
+			else {
+				//añadir ventajas premium
+			}
 			return true;
 		}
 		return false;
@@ -229,6 +243,11 @@ public enum Controlador implements PropertyChangeListener {
 		//Añadir playlist y actulizar en la bbdd el valor a premium
 		usuarioDAO.update(usuarioActual);
 		
+	}
+	
+	public double aplicarDescuento() 
+	{
+		return usuarioActual.descuento();
 	}
 	
 	public List<Cancion> getAllCanciones(){

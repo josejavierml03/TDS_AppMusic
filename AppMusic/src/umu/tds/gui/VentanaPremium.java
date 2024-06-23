@@ -60,9 +60,10 @@ public class VentanaPremium {
         Box horizontalBox = Box.createHorizontalBox();
         horizontalBox.setAlignmentX(Component.CENTER_ALIGNMENT);
         verticalBox.add(horizontalBox);
-
-        JLabel lblNewLabel_1 = new JLabel("Precio:");
-        horizontalBox.add(lblNewLabel_1);
+        double precioConDescuento = Controlador.INSTANCE.aplicarDescuento();
+        String truncado = String.format("%.1f",precioConDescuento);
+        JLabel precio = new JLabel("Precio: " + truncado);
+        horizontalBox.add(precio);
 
         Box horizontalBox_1 = Box.createHorizontalBox();
         horizontalBox_1.setAlignmentX(Component.CENTER_ALIGNMENT);

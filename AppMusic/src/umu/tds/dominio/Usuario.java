@@ -94,9 +94,8 @@ public class Usuario {
 		Period periodo = Period.between(fechaNacimiento, LocalDate.now());
 		int edad = periodo.getYears();
 		if (edad>65) desc=new DescuentoMayores();
-		else if (edad < 21) desc =new DescuentoJovenesTemporal();
-		else desc=null;
-		return null;
+		else desc =new DescuentoTemporal();
+		return desc;
 	}
 	
 	public PlayList crearPl(String titulo) 

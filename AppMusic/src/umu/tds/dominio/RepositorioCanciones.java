@@ -63,12 +63,6 @@ public void reproducida(Cancion c) {
 		return canciones;
 	}
 	
-	public List<Cancion> findTitulo(String titulo)
-	{
-		List<Cancion> ca = canciones.stream().filter(c-> c.getTitulo().equals(titulo)).collect(Collectors.toList());
-		return ca;
-	}
-	
 	public HashSet<String> findEstilos()
 	{
 		List<Cancion> ca = findAll();
@@ -88,6 +82,50 @@ public void reproducida(Cancion c) {
 	            .orElse(null);
 	}
 	
+	public Cancion findCancionTiIn(String titulo,String interprete) 
+	{
+		return canciones.stream()
+	            .filter(c -> c.getTitulo().equals(titulo)
+	                    && c.getInterprete().equals(interprete))
+	            .findFirst()
+	            .orElse(null);
+	}
+	
+	public List<Cancion> findCancionTiEs(String titulo,String estilo) 
+	{
+		return canciones.stream()
+	            .filter(c -> c.getTitulo().equals(titulo) && c.getEstilo().equals(estilo))
+	            .collect(Collectors.toList());      
+	}
+	
+	public List<Cancion> findCancionInEs(String interprete,String estilo) 
+	{
+		return canciones.stream()
+	            .filter(c -> c.getInterprete().equals(interprete) && c.getEstilo().equals(estilo))
+	            .collect(Collectors.toList());   
+	}
+	
+
+	public List<Cancion> findTitulo(String titulo)
+	{
+		return canciones.stream().filter(c-> c.getTitulo().equals(titulo))
+				.collect(Collectors.toList());	
+	}
+	
+	public List<Cancion> findInterprete(String interprete) 
+	{
+		return canciones.stream().filter(c->c.getInterprete().equals(interprete))
+				.collect(Collectors.toList());			
+	}
+	
+	
+	public List<Cancion> findEstilo(String estilo) 
+	{
+		return canciones.stream().filter(c->c.getEstilo().equals(estilo))
+				.collect(Collectors.toList()); 
+	}
+	
+	
 	public List<Cancion> findTituloyPlaylist(List<Cancion> cancionesPl , String titulo)
 	{
 		List<Cancion> ca = canciones.stream().filter(c-> c.getTitulo().equals(titulo)).collect(Collectors.toList());
@@ -96,9 +134,10 @@ public void reproducida(Cancion c) {
 			return ca.stream().filter( cancion -> cancionesPl.contains(cancion)).collect(Collectors.toList());
 		
 		}
-		return null;
-		 
+		return null; 
 	}
-	//Añadir todos los find's
+	
+	
+	//Añadir todos los find's playList
 }
 

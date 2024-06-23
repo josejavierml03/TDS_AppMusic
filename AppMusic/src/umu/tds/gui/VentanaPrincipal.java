@@ -93,8 +93,6 @@ public class VentanaPrincipal implements IEncendidoListener {
 	private DefaultTableModel tableModel;
 	private Luz luz;
 	private JTextField anadirCancionPl;
-	private boolean plEliminada;
-
 	public VentanaPrincipal() {
 		initialize();
 	}

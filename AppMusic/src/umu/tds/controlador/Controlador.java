@@ -4,7 +4,6 @@ import umu.tds.dao.UsuarioDAO;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -100,24 +99,21 @@ public enum Controlador implements PropertyChangeListener {
 			this.usuarioActual = usuario;
 			if (!usuarioActual.getPremium()) 
 			{
-				usuarioActual.asignarDescuento();
+				this.addMasRepro();
 			}
 			else {
-				List<Cancion> cancionesMasRepro = RepositorioCanciones.INSTANCE.findMasRepro();
-				usuarioActual.setMasRepro(cancionesMasRepro);
+				this.addMasRepro();
 			}
 			return true;
 		}
 		return false;
 	}
 	
-	public boolean comprobarPremium() 
-	{
+	public boolean comprobarPremium() {
 		return usuarioActual.getPremium();
 	}
 	
-	public void cargarCanciones(String fichero) 
-	{
+	public void cargarCanciones(String fichero) {
 		cargador.setCancion(fichero);
 	}
 	
@@ -132,7 +128,6 @@ public enum Controlador implements PropertyChangeListener {
 	}
 	
 	public void reproducirCancion(Cancion cancion) {	
-		
 		URL url = null;
 		try {
 			url = new URL(cancion.getRuta().replaceAll("\\s", ""));
@@ -195,18 +190,19 @@ public enum Controlador implements PropertyChangeListener {
 		}
 		return existe;
 	}
+	
 	public void addCancionPl(String pl, Cancion ca)
 	{
 		PlayList lista = usuarioActual.addCancionToPl(pl, ca);
 		plDAO.update(lista);
-		
 	}
+	
 	public void eliminarCancionPl(String pl, int id)
 	{
 		PlayList lista = usuarioActual.eliminarCancionToPl(pl,id);
-
 		plDAO.update(lista);
 	}
+	
 	public Boolean PDF(String ruta) throws FileNotFoundException, DocumentException
 	{
 		if (usuarioActual.pdf(ruta)!=null) {
@@ -220,7 +216,6 @@ public enum Controlador implements PropertyChangeListener {
 		return RepositorioCanciones.INSTANCE.findEstilos();
 	}
 	
-
 	public boolean registrarUsuario(String nombre, String apellidos, String email, String login, String password,
 			LocalDate fechaNacimiento) {
 
@@ -251,10 +246,15 @@ public enum Controlador implements PropertyChangeListener {
 	public void usuarioPremium() 
 	{
 		usuarioActual.pago();
-		List<Cancion> cancionesMasRepro = RepositorioCanciones.INSTANCE.findMasRepro();
-		usuarioActual.setMasRepro(cancionesMasRepro);
+		this.addMasRepro();
 		usuarioDAO.update(usuarioActual);
 		
+	}
+	
+	public void addMasRepro() 
+	{
+		List<Cancion> cancionesMasRepro = RepositorioCanciones.INSTANCE.findMasRepro();
+		usuarioActual.setMasRepro(cancionesMasRepro);
 	}
 	
 	public List<Cancion> getMasRepro(){
@@ -279,7 +279,6 @@ public enum Controlador implements PropertyChangeListener {
 		List<Cancion> canciones = usuarioActual.cancionesPl();
 		return RepositorioCanciones.INSTANCE.findTituloyPlaylist(canciones,titulo);
 	}
-	
 	
 	public Cancion getCancionTituloInterpreteEstilo(String titulo,String interprete,String estilo) 
 	{

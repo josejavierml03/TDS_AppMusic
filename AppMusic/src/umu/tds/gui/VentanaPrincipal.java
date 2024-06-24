@@ -1,72 +1,45 @@
 package umu.tds.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Font;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import javax.swing.BoxLayout;
 import javax.swing.ButtonModel;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import java.awt.Component;
-import java.awt.Rectangle;
-import java.awt.Point;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-
-import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JCheckBox;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
-
 import java.awt.CardLayout;
 import javax.swing.Box;
 import javax.swing.JRadioButton;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.AbstractListModel;
-import javax.swing.BorderFactory;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
-
-import org.kohsuke.github.GHCommit.File;
-
 import com.itextpdf.text.DocumentException;
-
 import umu.tds.controlador.Controlador;
 import umu.tds.dominio.Cancion;
-
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.FileNotFoundException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-
-import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 import javax.swing.UIManager;

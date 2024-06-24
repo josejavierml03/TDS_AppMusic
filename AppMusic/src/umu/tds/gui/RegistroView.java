@@ -6,9 +6,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
-
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -31,6 +29,10 @@ import com.toedter.calendar.JDateChooser;
 
 public class RegistroView extends JDialog {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	//private JFrame frmRegistroView;
 	private JLabel lblNombre;
 	private JLabel lblApellidos;

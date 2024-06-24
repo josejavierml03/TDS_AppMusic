@@ -1,11 +1,7 @@
 package umu.tds.services;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import umu.tds.dominio.Cancion;

@@ -5,13 +5,9 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import org.h2.command.dml.Set;
-
 import umu.tds.dao.CancionDAO;
 import umu.tds.dao.DAOException;
 import umu.tds.dao.FactoriaDAO;
-import umu.tds.dao.TDSCancionDAO;
 
 public enum RepositorioCanciones {
 INSTANCE;

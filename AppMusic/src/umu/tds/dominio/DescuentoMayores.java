@@ -10,8 +10,6 @@ public class DescuentoMayores implements Descuento{
 		return Controlador.precio*DESCUENTOJOVENES;
 	}
 	
-	public double getDescuento() {
-		return DESCUENTOJOVENES;
-	}
+
 	
 }

@@ -93,6 +93,8 @@ public class VentanaPrincipal implements IEncendidoListener {
 	private DefaultTableModel tableModel;
 	private Luz luz;
 	private JTextField anadirCancionPl;
+	private Cancion cancionActual=null;
+	
 	public VentanaPrincipal() {
 		initialize();
 	}
@@ -385,17 +387,17 @@ public class VentanaPrincipal implements IEncendidoListener {
 		Box horizontalBox_1 = Box.createHorizontalBox();
 		verticalBox_4.add(horizontalBox_1);
 
-		JButton btnNewButton_9 = new JButton();
-		configurarBoton(btnNewButton_9, rutaStop);
-		horizontalBox_1.add(btnNewButton_9);
+		JButton stop = new JButton();
+		configurarBoton(stop, rutaStop);
+		horizontalBox_1.add(stop);
 
-		JButton btnNewButton_7 = new JButton();
-		configurarBoton(btnNewButton_7, rutaPlay);
-		horizontalBox_1.add(btnNewButton_7);
+		JButton player = new JButton();
+		configurarBoton(player, rutaPlay);
+		horizontalBox_1.add(player);
 
-		JButton btnNewButton_10 = new JButton();
-		configurarBoton(btnNewButton_10, rutaSiguente);
-		horizontalBox_1.add(btnNewButton_10);
+		JButton pause = new JButton();
+		configurarBoton(pause, rutaSiguente);
+		horizontalBox_1.add(pause);
 
 		Component horizontalStrut = Box.createHorizontalStrut(20);
 		horizontalBox_1.add(horizontalStrut);
@@ -472,26 +474,26 @@ public class VentanaPrincipal implements IEncendidoListener {
 		Component verticalStrut_8 = Box.createVerticalStrut(20);
 		verticalBox_6.add(verticalStrut_8);
 
-		Box horizontalBox_4 = Box.createHorizontalBox();
-		verticalBox_6.add(horizontalBox_4);
+		Box horizontalBox_20 = Box.createHorizontalBox();
+		verticalBox_6.add(horizontalBox_20);
 
-		JButton btnNewButton_12 = new JButton();
-		configurarBoton(btnNewButton_12, rutaStop);
-		horizontalBox_4.add(btnNewButton_12);
+		JButton stop1 = new JButton();
+		configurarBoton(stop1, rutaStop);
+		horizontalBox_20.add(stop1);
 
-		JButton btnNewButton_14 = new JButton();
-		configurarBoton(btnNewButton_14, rutaPlay);
-		horizontalBox_4.add(btnNewButton_14);
+		JButton player1 = new JButton();
+		configurarBoton(player1, rutaPlay);
+		horizontalBox_20.add(player1);
 
-		JButton btnNewButton_15 = new JButton();
-		configurarBoton(btnNewButton_15, rutaSiguente);
-		horizontalBox_4.add(btnNewButton_15);
+		JButton pause1 = new JButton();
+		configurarBoton(pause1, rutaSiguente);
+		horizontalBox_20.add(pause1);
 
 		Component horizontalStrut_2 = Box.createHorizontalStrut(20);
-		horizontalBox_4.add(horizontalStrut_2);
+		horizontalBox_20.add(horizontalStrut_2);
 
 		JButton eliminarLista = new JButton("Eliminar Lista");
-		horizontalBox_4.add(eliminarLista);
+		horizontalBox_20.add(eliminarLista);
 
 		JPanel panel_11 = new JPanel();
 		panel_3.add(panel_11, "panel_11");
@@ -529,17 +531,21 @@ public class VentanaPrincipal implements IEncendidoListener {
 		Box horizontalBox_4_1 = Box.createHorizontalBox();
 		verticalBox_7.add(horizontalBox_4_1);
 
-		JButton btnNewButton_12_1 = new JButton();
-		configurarBoton(btnNewButton_12_1, rutaStop);
-		horizontalBox_4_1.add(btnNewButton_12_1);
+		JButton stop2 = new JButton();
+		configurarBoton(stop2, rutaStop);
+		horizontalBox_4_1.add(stop2);
 
-		JButton btnNewButton_14_1 = new JButton();
-		configurarBoton(btnNewButton_14_1, rutaPlay);
-		horizontalBox_4_1.add(btnNewButton_14_1);
+		JButton player2 = new JButton();
+		configurarBoton(player2, rutaPlay);
+		horizontalBox_4_1.add(player2);
 
-		JButton btnNewButton_15_1 = new JButton();
-		configurarBoton(btnNewButton_15_1, rutaSiguente);
-		horizontalBox_4_1.add(btnNewButton_15_1);
+		JButton pause2 = new JButton();
+		pause2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		configurarBoton(pause2, rutaSiguente);
+		horizontalBox_4_1.add(pause2);
 
 		buscarInicial.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -581,21 +587,21 @@ public class VentanaPrincipal implements IEncendidoListener {
                     	if (!contieneCancion) {
                     		Controlador.INSTANCE.addCancionPl(anadirCancionPl.getText(), ca);
                     		add++;
-                    		if (add == 1) {
-                    		JOptionPane.showMessageDialog(frmVentanaPrincipal, add + " cancion añadida", "PlayList",
-            						JOptionPane.INFORMATION_MESSAGE);
-                    		}else { 
-                    			JOptionPane.showMessageDialog(frmVentanaPrincipal, add + " canciones añadidas", "PlayList",
-                						JOptionPane.INFORMATION_MESSAGE);
-                    		}
+                    		
                     	}
 	                }
 	           }
-			   if (add==0) 
+			    if (add == 1) {
+            		JOptionPane.showMessageDialog(frmVentanaPrincipal, add + " cancion añadida", "PlayList",
+    						JOptionPane.INFORMATION_MESSAGE);
+               } else if (add==0) 
 			   {
 				   JOptionPane.showMessageDialog(frmVentanaPrincipal, "No se han añadido canciones", "PlayList",
    						JOptionPane.INFORMATION_MESSAGE);
-			   }
+			   }else { 
+       			JOptionPane.showMessageDialog(frmVentanaPrincipal, add + " canciones añadidas", "PlayList",
+   						JOptionPane.INFORMATION_MESSAGE);
+       		}
 			   
 			}
 		});
@@ -667,6 +673,156 @@ public class VentanaPrincipal implements IEncendidoListener {
 			}
 		});
 		
+		player.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				List<Cancion> lista = new ArrayList<>();
+				for (int row = 0; row < table.getRowCount(); row++) {
+                    Boolean value = (Boolean) table.getValueAt(row, 3);
+                    if (value) {
+                    	Object[] rowD = new Object[tableModel.getColumnCount()];
+                    	for (int i = 0; i < tableModel.getColumnCount(); i++) {
+                    		rowD[i] = table.getValueAt(row, i);
+                    	}
+                    	Cancion ca = Controlador.INSTANCE.getCancionTituloInterpreteEstilo((String)rowD[0],(String) rowD[1],(String)rowD[2]);
+                    	
+    		            lista.add(ca);
+                    }
+                }
+				if(lista.size()==0) 
+				{
+					JOptionPane.showMessageDialog(frmVentanaPrincipal, "Selecciona una cancion para reproducirla", "Error",
+							JOptionPane.WARNING_MESSAGE);
+				}
+				else if (lista.size()==1) 
+				{	
+					Cancion cancionPlay = null;
+					for (Cancion ca : lista) 
+					{
+						cancionPlay=ca;
+					}
+					if (cancionActual == null) 
+					{
+						cancionActual=cancionPlay;
+						Controlador.INSTANCE.reproducirCancion(cancionPlay);
+					}
+					else if (cancionActual != cancionPlay) 
+					{
+						cancionActual=cancionPlay;
+						Controlador.INSTANCE.reproducirCancion(cancionPlay);
+					}
+					else if (cancionActual == cancionPlay) 
+					{
+						Controlador.INSTANCE.reanudarCancion();
+					}	
+				}
+				else if (lista.size()> 1)
+				{
+					JOptionPane.showMessageDialog(frmVentanaPrincipal, "Selecciona SOLO una cancion para reproducirla", "Error",
+							JOptionPane.WARNING_MESSAGE);
+				}
+			}
+		});
+		
+		player1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				List<Cancion> lista = new ArrayList<>();
+				for (int row = 0; row < table_1.getRowCount(); row++) {
+                    Boolean value = (Boolean) table_1.getValueAt(row, 3);
+                    if (value) {
+                    	Object[] rowD = new Object[tableModel1.getColumnCount()];
+                    	for (int i = 0; i < tableModel1.getColumnCount(); i++) {
+                    		rowD[i] = table_1.getValueAt(row, i);
+                    	}
+                    	Cancion ca = Controlador.INSTANCE.getCancionTituloInterpreteEstilo((String)rowD[0],(String) rowD[1],(String)rowD[2]);
+                    	
+    		            lista.add(ca);
+                    }
+                }
+				if(lista.size()==0) 
+				{
+					JOptionPane.showMessageDialog(frmVentanaPrincipal, "Selecciona una cancion para reproducirla", "Error",
+							JOptionPane.WARNING_MESSAGE);
+				}
+				else if (lista.size()==1) 
+				{	
+					Cancion cancionPlay = null;
+					for (Cancion ca : lista) 
+					{
+						cancionPlay=ca;
+					}
+					if (cancionActual == null) 
+					{
+						cancionActual=cancionPlay;
+						Controlador.INSTANCE.reproducirCancion(cancionPlay);
+					}
+					else if (cancionActual != cancionPlay) 
+					{
+						cancionActual=cancionPlay;
+						Controlador.INSTANCE.reproducirCancion(cancionPlay);
+					}
+					else if (cancionActual == cancionPlay) 
+					{
+						Controlador.INSTANCE.reanudarCancion();
+					}	
+				}
+				else if (lista.size()> 1)
+				{
+					JOptionPane.showMessageDialog(frmVentanaPrincipal, "Selecciona SOLO una cancion para reproducirla", "Error",
+							JOptionPane.WARNING_MESSAGE);
+				}
+			}
+		});
+		
+		player2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				List<Cancion> lista = new ArrayList<>();
+				for (int row = 0; row < table_2.getRowCount(); row++) {
+                    Boolean value = (Boolean) table_2.getValueAt(row, 3);
+                    if (value) {
+                    	Object[] rowD = new Object[tableModel2.getColumnCount()];
+                    	for (int i = 0; i < tableModel2.getColumnCount(); i++) {
+                    		rowD[i] = table_2.getValueAt(row, i);
+                    	}
+                    	Cancion ca = Controlador.INSTANCE.getCancionTituloInterpreteEstilo((String)rowD[0],(String) rowD[1],(String)rowD[2]);
+                    	
+    		            lista.add(ca);
+                    }
+                }
+				if(lista.size()==0) 
+				{
+					JOptionPane.showMessageDialog(frmVentanaPrincipal, "Selecciona una cancion para reproducirla", "Error",
+							JOptionPane.WARNING_MESSAGE);
+				}
+				else if (lista.size()==1) 
+				{	
+					Cancion cancionPlay = null;
+					for (Cancion ca : lista) 
+					{
+						cancionPlay=ca;
+					}
+					if (cancionActual == null) 
+					{
+						cancionActual=cancionPlay;
+						Controlador.INSTANCE.reproducirCancion(cancionPlay);
+					}
+					else if (cancionActual != cancionPlay) 
+					{
+						cancionActual=cancionPlay;
+						Controlador.INSTANCE.reproducirCancion(cancionPlay);
+					}
+					else if (cancionActual == cancionPlay) 
+					{
+						Controlador.INSTANCE.reanudarCancion();
+					}	
+				}
+				else if (lista.size()> 1)
+				{
+					JOptionPane.showMessageDialog(frmVentanaPrincipal, "Selecciona SOLO una cancion para reproducirla", "Error",
+							JOptionPane.WARNING_MESSAGE);
+				}
+			}
+		});
+		
 		buscar.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		        CardLayout cl = (CardLayout) (panel_3.getLayout());
@@ -720,6 +876,55 @@ public class VentanaPrincipal implements IEncendidoListener {
 				}
 			}
 		});
+		
+		stop.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (cancionActual!=null) {
+					Controlador.INSTANCE.pararCancion();
+				}
+			}
+		});
+		
+		pause.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (cancionActual!=null) {
+					Controlador.INSTANCE.pausarCancion();
+				}
+			}
+		});
+		
+		stop2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (cancionActual!=null) {
+					Controlador.INSTANCE.pararCancion();
+				}
+			}
+		});
+		
+		pause2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (cancionActual!=null) {
+					Controlador.INSTANCE.pausarCancion();
+				}
+			}
+		});
+		
+		stop1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (cancionActual!=null) {
+					Controlador.INSTANCE.pararCancion();
+				}
+			}
+		});
+		
+		pause1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (cancionActual!=null) {
+					Controlador.INSTANCE.pausarCancion();
+				}
+			}
+		});
+		
 		buscar2.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		    	tableModel.setRowCount(0);
@@ -758,6 +963,25 @@ public class VentanaPrincipal implements IEncendidoListener {
 				for (String elemento : listaPl) {
 					modeloLista.addElement(elemento);
 				}
+				
+			}
+		});
+		
+		recientes.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CardLayout cl = (CardLayout) (panel_3.getLayout());
+				cl.show(panel_3, "panel_11");
+				List<Cancion> canciones = Controlador.INSTANCE.recientes();
+				tableModel2.setRowCount(0);
+                 if (canciones.size()==0) 
+                 {
+                 	JOptionPane.showMessageDialog(frmVentanaPrincipal, "No hay canciones recientes", "PlayList",
+ 							JOptionPane.WARNING_MESSAGE);
+                 }
+                	for (Cancion cancion : canciones) {
+ 		           	Object[] rowData = { cancion.getTitulo(), cancion.getInterprete(), cancion.getEstilo(), false };
+ 		           	tableModel2.addRow(rowData);
+ 		        } 
 				
 			}
 		});
@@ -818,13 +1042,6 @@ public class VentanaPrincipal implements IEncendidoListener {
 		});
 
 
-		recientes.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				CardLayout cl = (CardLayout) (panel_3.getLayout());
-				cl.show(panel_3, "panel_11");
-			}
-		});
-
 		lista.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -847,6 +1064,25 @@ public class VentanaPrincipal implements IEncendidoListener {
                     
                 }
 				tableModel2.fireTableDataChanged(); 
+			}
+		});
+		
+		masReproducidas.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CardLayout cl = (CardLayout) (panel_3.getLayout());
+				cl.show(panel_3, "panel_11");
+				List<Cancion> canciones = Controlador.INSTANCE.getMasRepro();
+				tableModel2.setRowCount(0);
+                 if (canciones.size()==0) 
+                 {
+                 	JOptionPane.showMessageDialog(frmVentanaPrincipal, "No hay canciones recientes", "PlayList",
+ 							JOptionPane.WARNING_MESSAGE);
+                 }
+                	for (Cancion cancion : canciones) {
+ 		           	Object[] rowData = { cancion.getTitulo(), cancion.getInterprete(), cancion.getEstilo(), false };
+ 		           	tableModel2.addRow(rowData);
+ 		        } 
+				
 			}
 		});
 
@@ -877,7 +1113,7 @@ public class VentanaPrincipal implements IEncendidoListener {
 		frmVentanaPrincipal.setLocationRelativeTo(null);
 
 	}
-
+	
 	static class CheckBoxRenderer extends JCheckBox implements TableCellRenderer {
         /**
 		 * 

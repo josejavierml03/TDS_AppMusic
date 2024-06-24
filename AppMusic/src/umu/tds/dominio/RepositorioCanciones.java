@@ -1,5 +1,6 @@
 package umu.tds.dominio;
 
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -116,6 +117,14 @@ public void reproducida(Cancion c) {
 	{
 		return canciones.stream().filter(c->c.getInterprete().equals(interprete))
 				.collect(Collectors.toList());			
+	}
+	
+	public List<Cancion> findMasRepro()
+	{
+		return canciones.stream()
+		        .sorted(Comparator.comparingInt(Cancion::getNumRepros).reversed())
+		        .limit(10)
+		        .collect(Collectors.toList());
 	}
 	
 	

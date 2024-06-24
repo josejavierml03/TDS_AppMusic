@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +27,7 @@ public class Usuario {
 	private String password;
 	private LocalDate fechaNacimiento;
 	private Boolean premium;
-	private PlayList masRepro;
+	private List<Cancion> masRepro;
 	private List<PlayList> playlists;
 	private List<Cancion> recientes;
 	private Descuento desc;
@@ -46,20 +47,7 @@ public class Usuario {
 		this.desc= this.asignarDescuento();
 		
 	}
-	
-	public void addRecientes(Cancion c) 
-	{
-		if (recientes.contains(c)) 
-		{
-			recientes.remove(c);
-		}
-		if (recientes.size()>10) 
-		{
-			recientes.remove(9);
-		}
-		recientes.add(0,c);
-	}
-	
+		
 	public void addPL(PlayList lista) {
 		playlists.add(lista);
 	}
@@ -94,7 +82,7 @@ public class Usuario {
 		Period periodo = Period.between(fechaNacimiento, LocalDate.now());
 		int edad = periodo.getYears();
 		if (edad>65) desc=new DescuentoMayores();
-		else desc =new DescuentoTemporal();
+		else desc =new Descuento10dias();
 		return desc;
 	}
 	
@@ -187,6 +175,22 @@ public class Usuario {
 	    return null;
 	}
 	
+	public void addCancionRecientes(Cancion c) 
+	{
+		Iterator<Cancion> iterator = recientes.iterator();
+		while (iterator.hasNext()) {
+			Cancion ca = iterator.next();
+		    if (ca.getId() == c.getId()) {
+		        iterator.remove(); 
+		        break; 
+		    }
+		}
+		
+		if(recientes.size() == 10)	recientes.remove(9); 
+		recientes.add(0, c);;
+	}
+	
+	
 	public int getId() {
 		return id;
 	}
@@ -251,11 +255,11 @@ public class Usuario {
 		this.premium = premium;
 	}
 
-	public PlayList getMasRepro() {
+	public List<Cancion> getMasRepro() {
 		return masRepro;
 	}
 
-	public void setMasRepro(PlayList masRepro) {
+	public void setMasRepro(List<Cancion> masRepro) {
 		this.masRepro = masRepro;
 	}
 

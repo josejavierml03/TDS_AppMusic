@@ -86,7 +86,8 @@ public enum Controlador implements PropertyChangeListener {
 				usuarioActual.asignarDescuento();
 			}
 			else {
-				//añadir ventajas premium
+				List<Cancion> cancionesMasRepro = RepositorioCanciones.INSTANCE.findMasRepro();
+				usuarioActual.setMasRepro(cancionesMasRepro);
 			}
 			return true;
 		}
@@ -102,7 +103,8 @@ public enum Controlador implements PropertyChangeListener {
 				usuarioActual.asignarDescuento();
 			}
 			else {
-				//añadir ventajas premium
+				List<Cancion> cancionesMasRepro = RepositorioCanciones.INSTANCE.findMasRepro();
+				usuarioActual.setMasRepro(cancionesMasRepro);
 			}
 			return true;
 		}
@@ -129,17 +131,24 @@ public enum Controlador implements PropertyChangeListener {
 		}
 	}
 	
-	public void reproducirCancion(Cancion cancion) throws MalformedURLException {	
+	public void reproducirCancion(Cancion cancion) {	
 		
-		URL url = new URL(cancion.getRuta());
-		Media media = new Media(url.toString());   
+		URL url = null;
+		try {
+			url = new URL(cancion.getRuta().replaceAll("\\s", ""));
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+			return;
+		}
+		
+		Media media = new Media(url.toString());
 		mediaPlayer = new MediaPlayer(media); 
 		mediaPlayer.play();
-			
-		usuarioActual.addRecientes(cancion);	
+				
+		usuarioActual.addCancionRecientes(cancion);	
 		usuarioDAO.update(usuarioActual);	
 		RepositorioCanciones.INSTANCE.reproducida(cancion);	
-	
+
 	}
 	
 	public void pausarCancion() {
@@ -154,7 +163,9 @@ public enum Controlador implements PropertyChangeListener {
 		mediaPlayer.stop();
 	}
 	
-	//public List<Cancion> recientes(){}
+	public List<Cancion> recientes(){
+		return usuarioActual.getRecientes();
+	}
 	
 	public List<String> nombrePlayLists(){
 		return usuarioActual.nombrePl();
@@ -240,9 +251,14 @@ public enum Controlador implements PropertyChangeListener {
 	public void usuarioPremium() 
 	{
 		usuarioActual.pago();
-		//Añadir playlist y actulizar en la bbdd el valor a premium
+		List<Cancion> cancionesMasRepro = RepositorioCanciones.INSTANCE.findMasRepro();
+		usuarioActual.setMasRepro(cancionesMasRepro);
 		usuarioDAO.update(usuarioActual);
 		
+	}
+	
+	public List<Cancion> getMasRepro(){
+		return usuarioActual.getMasRepro();
 	}
 	
 	public double aplicarDescuento() 

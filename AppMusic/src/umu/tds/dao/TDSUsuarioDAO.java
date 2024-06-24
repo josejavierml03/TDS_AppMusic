@@ -72,7 +72,7 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 			}
 		}
 		lista.stream().forEach(usuario::addPL);
-		listaCanciones.stream().forEach(usuario::addRecientes);
+		listaCanciones.stream().forEach(usuario::addCancionRecientes);
 
 		return usuario;
 	}

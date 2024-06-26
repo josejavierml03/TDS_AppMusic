@@ -4,6 +4,7 @@ import umu.tds.dao.UsuarioDAO;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -119,21 +120,34 @@ public enum Controlador implements PropertyChangeListener {
 	}
 	
 	public void reproducirCancion(Cancion cancion) {	
-		URL url = null;
-		try {
-			url = new URL(cancion.getRuta().replaceAll("\\s", ""));
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			return;
+		String ruta = "";
+		Media media = null;
+		if (!cancion.getRuta().contains("https://") && !cancion.getRuta().contains("http://")) 
+		{
+			ruta = "src/canciones/"+cancion.getRuta();
+			String rutaString =new File(ruta).toURI().toString().replace("file:", "file://");
+			media = new Media(rutaString); 
 		}
-		
-		Media media = new Media(url.toString());
+		else {
+			URL url = null;
+			try {
+				url = new URL(cancion.getRuta().replaceAll("\\s", ""));
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+				return;
+			}
+			
+			media = new Media(url.toString());
+			
+		}
+		if (media !=null && ruta != null) {
 		mediaPlayer = new MediaPlayer(media); 
 		mediaPlayer.play();
 				
 		usuarioActual.addCancionRecientes(cancion);	
 		usuarioDAO.update(usuarioActual);	
 		RepositorioCanciones.INSTANCE.reproducida(cancion);	
+		}
 
 	}
 	

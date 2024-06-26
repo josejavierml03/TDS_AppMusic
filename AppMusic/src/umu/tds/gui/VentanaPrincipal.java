@@ -303,6 +303,7 @@ public class VentanaPrincipal implements IEncendidoListener {
 
 		interprete2 = new JTextField();
 		interprete2.setColumns(10);
+
 		verticalBox_1_1.add(interprete2);
 
 		Component verticalStrut_3_1 = Box.createVerticalStrut(20);

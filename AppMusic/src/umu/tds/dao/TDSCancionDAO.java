@@ -55,7 +55,8 @@ public class TDSCancionDAO implements CancionDAO {
 
 	@Override
 	public void create(Cancion c) {
-		Entidad eCancion = this.usuarioToEntidad(c);
+		Entidad eCancion;
+		eCancion = this.usuarioToEntidad(c);
 		eCancion = servPersistencia.registrarEntidad(eCancion);
 		c.setId(eCancion.getId());
 	}

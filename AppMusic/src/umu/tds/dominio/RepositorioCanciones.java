@@ -1,5 +1,6 @@
 package umu.tds.dominio;
 
+import java.io.File;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -21,12 +22,44 @@ INSTANCE;
 		try {
 			factoria = FactoriaDAO.getInstancia();
 			cancionDAO = factoria.getCancionDAO();
+			this.cancionesLocal();
 			List<Cancion> ca = new LinkedList<Cancion>(factoria.getCancionDAO().getAll());
 			ca.stream().forEach(c->addCancion(c));
 			
 		} catch (DAOException eDAO) {
 			   eDAO.printStackTrace();
 		}
+	}
+	
+	public void cancionesLocal() 
+	{
+        File directorio = new File("src/canciones");
+
+        if (directorio.exists() && directorio.isDirectory()) {
+
+            File[] fichero = directorio.listFiles((dir, name) -> name.endsWith(".mp3"));
+
+            if (fichero != null) {
+                for (File file : fichero) {
+                    String nombreFichero = file.getName().replace(".mp3", "");
+
+                    String[] parts = nombreFichero.split(" - ");
+
+                    if (parts.length == 3) {
+                        String titulo = parts[0].trim();
+                        String interprete = parts[1].trim();
+                        String estilo = parts[2].trim();
+                        Cancion ca = new Cancion(titulo, file.getName(), interprete, estilo);
+                        List<Cancion> cancionesBBDD = new LinkedList<Cancion>(factoria.getCancionDAO().getAll());
+                        boolean existe = cancionesBBDD.stream().anyMatch(c-> c.getTitulo().equals(ca.getTitulo()) && c.getInterprete().equals(ca.getInterprete()));
+                        if (!existe) {
+                        	cancionDAO.create(ca);
+                        }
+                    }
+                }
+            }
+        }
+
 	}
 	
 	public void addCancion(Cancion ca) 
@@ -42,7 +75,7 @@ INSTANCE;
 		canciones.remove(ca);
 	}
 	
-public void reproducida(Cancion c) {
+	public void reproducida(Cancion c) {
 		
 		Cancion cancion = c;
 		for(Cancion ca: canciones) {

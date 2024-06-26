@@ -80,13 +80,8 @@ public enum Controlador implements PropertyChangeListener {
 		Usuario usuario = RepositorioUsuarios.INSTANCE.findUsuario(nombre);
 		if (usuario != null && usuario.getPassword().equals(password)) {
 			this.usuarioActual = usuario;
-			if (!usuarioActual.getPremium()) 
-			{
+			if (!usuarioActual.getPremium()) {
 				usuarioActual.asignarDescuento();
-			}
-			else {
-				List<Cancion> cancionesMasRepro = RepositorioCanciones.INSTANCE.findMasRepro();
-				usuarioActual.setMasRepro(cancionesMasRepro);
 			}
 			return true;
 		}
@@ -97,12 +92,8 @@ public enum Controlador implements PropertyChangeListener {
 		Usuario usuario = RepositorioUsuarios.INSTANCE.findUsuario(nombre);
 		if (usuario != null) {
 			this.usuarioActual = usuario;
-			if (!usuarioActual.getPremium()) 
-			{
-				this.addMasRepro();
-			}
-			else {
-				this.addMasRepro();
+			if (!usuarioActual.getPremium()) {
+				usuarioActual.asignarDescuento();
 			}
 			return true;
 		}
@@ -243,22 +234,14 @@ public enum Controlador implements PropertyChangeListener {
 		return true;
 	}
 	
-	public void usuarioPremium() 
-	{
+	public void usuarioPremium() {
 		usuarioActual.pago();
-		this.addMasRepro();
 		usuarioDAO.update(usuarioActual);
 		
 	}
 	
-	public void addMasRepro() 
-	{
-		List<Cancion> cancionesMasRepro = RepositorioCanciones.INSTANCE.findMasRepro();
-		usuarioActual.setMasRepro(cancionesMasRepro);
-	}
-	
 	public List<Cancion> getMasRepro(){
-		return usuarioActual.getMasRepro();
+		return RepositorioCanciones.INSTANCE.findMasRepro();
 	}
 	
 	public double aplicarDescuento() 

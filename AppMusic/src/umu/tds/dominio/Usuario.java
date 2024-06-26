@@ -26,7 +26,6 @@ public class Usuario {
 	private String password;
 	private LocalDate fechaNacimiento;
 	private Boolean premium;
-	private List<Cancion> masRepro;
 	private List<PlayList> playlists;
 	private List<Cancion> recientes;
 	private Descuento desc;
@@ -252,14 +251,6 @@ public class Usuario {
 
 	public void setPremium(Boolean premium) {
 		this.premium = premium;
-	}
-
-	public List<Cancion> getMasRepro() {
-		return masRepro;
-	}
-
-	public void setMasRepro(List<Cancion> masRepro) {
-		this.masRepro = masRepro;
 	}
 
 	public List<PlayList> getPlaylists() {

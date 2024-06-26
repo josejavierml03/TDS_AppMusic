@@ -4,8 +4,6 @@ import static org.junit.Assert.*;
 
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
-import java.util.LinkedList;
-
 import org.junit.Before;
 import org.junit.Test;
 

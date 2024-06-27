@@ -44,6 +44,7 @@ public enum Controlador implements PropertyChangeListener {
 	
 	public static double precio = 6;
 	
+	//Comprueba que canciones son las que se han añadido y las añade a la BBDD
 	public void propertyChange(PropertyChangeEvent evento) 
 	{
 		Canciones canciones = MapperCancionesXMLtoJava.cargarCanciones(evento.getNewValue().toString());
@@ -72,7 +73,7 @@ public enum Controlador implements PropertyChangeListener {
 	public Usuario getUsuarioActual() {
 		return usuarioActual;
 	}
-
+	//Metodos para controlar el usuario (login,register)
 	public boolean esUsuarioRegistrado(String login) {
 		return RepositorioUsuarios.INSTANCE.findUsuario(login) != null;
 	}
@@ -101,6 +102,28 @@ public enum Controlador implements PropertyChangeListener {
 		return false;
 	}
 	
+	public boolean registrarUsuario(String nombre, String apellidos, String email, String login, String password,
+			LocalDate fechaNacimiento) {
+
+		if (esUsuarioRegistrado(login))
+			return false;
+		Usuario usuario = new Usuario(nombre, apellidos, email, login, password, fechaNacimiento);
+		usuarioDAO.create(usuario);
+
+		RepositorioUsuarios.INSTANCE.addUsuario(usuario);
+		return true;
+	}
+	
+	public boolean borrarUsuario(Usuario usuario) {
+		if (!esUsuarioRegistrado(usuario.getLogin()))
+			return false;
+
+		usuarioDAO.delete(usuario);
+
+		RepositorioUsuarios.INSTANCE.removeUsuario(usuario);
+		return true;
+	}
+	
 	public boolean comprobarPremium() {
 		return usuarioActual.getPremium();
 	}
@@ -108,7 +131,7 @@ public enum Controlador implements PropertyChangeListener {
 	public void cargarCanciones(String fichero) {
 		cargador.setCancion(fichero);
 	}
-	
+	//Metodos para activar o controlar el reproductor
 	private void activarReproductor() {
 		try {
 			com.sun.javafx.application.PlatformImpl.startup(() -> {
@@ -170,7 +193,7 @@ public enum Controlador implements PropertyChangeListener {
 	public List<String> nombrePlayLists(){
 		return usuarioActual.nombrePl();
 	}
-	
+	//Metodos para gestionar una playlist
 	public Boolean crearPl(String nombre){
 		PlayList pl = usuarioActual.crearPl(nombre);
 		if (pl!=null) 
@@ -215,52 +238,30 @@ public enum Controlador implements PropertyChangeListener {
 		}
 		return false;
 	}
-	
+	//Metodo para asginar en el comienzo de la ejecucion del programa todos los estilos de las canciones de la BBDD
 	public HashSet<String> estilos()
 	{
 		return RepositorioCanciones.INSTANCE.findEstilos();
 	}
 	
-	public boolean registrarUsuario(String nombre, String apellidos, String email, String login, String password,
-			LocalDate fechaNacimiento) {
-
-		if (esUsuarioRegistrado(login))
-			return false;
-		Usuario usuario = new Usuario(nombre, apellidos, email, login, password, fechaNacimiento);
-		usuarioDAO.create(usuario);
-
-		RepositorioUsuarios.INSTANCE.addUsuario(usuario);
-		return true;
-	}
 	
 	public List<Cancion> cancionesPl(String titulo)
 	{
 		return usuarioActual.obtenerCanciones(titulo);
 	}
 	
-	public boolean borrarUsuario(Usuario usuario) {
-		if (!esUsuarioRegistrado(usuario.getLogin()))
-			return false;
-
-		usuarioDAO.delete(usuario);
-
-		RepositorioUsuarios.INSTANCE.removeUsuario(usuario);
-		return true;
-	}
-	
 	public void usuarioPremium() {
 		usuarioActual.pago();
 		usuarioDAO.update(usuarioActual);
-		
-	}
-	
-	public List<Cancion> getMasRepro(){
-		return RepositorioCanciones.INSTANCE.findMasRepro();
 	}
 	
 	public double aplicarDescuento() 
 	{
 		return usuarioActual.descuento();
+	}
+	//Metodos get de la clase RepositorioCanciones
+	public List<Cancion> getMasRepro(){
+		return RepositorioCanciones.INSTANCE.findMasRepro();
 	}
 	
 	public List<Cancion> getAllCanciones(){

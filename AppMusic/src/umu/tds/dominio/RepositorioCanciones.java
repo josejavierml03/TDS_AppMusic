@@ -31,6 +31,7 @@ INSTANCE;
 		}
 	}
 	
+	//Obtiene los archivos .mp3 y los añade a la BBDD
 	public void cancionesLocal() 
 	{
         File directorio = new File("src/canciones");
@@ -74,7 +75,7 @@ INSTANCE;
 	public void removeCancion(Cancion ca) {
 		canciones.remove(ca);
 	}
-	
+	//Cambia el numero de reproducciones y actualiza la BBDD
 	public void reproducida(Cancion c) {
 		
 		Cancion cancion = c;
@@ -89,6 +90,7 @@ INSTANCE;
 		cancionDAO.update(cancion);
 	}
 	
+	//Metodos para obtener las canciones segun los parametros de la busqueda
 	public List<Cancion> findAll() {
 		return canciones;
 	}
@@ -312,9 +314,6 @@ INSTANCE;
 		}
 		return null; 
 	}
-	
-	
-	
-	//Añadir todos los find's playList
+
 }
 

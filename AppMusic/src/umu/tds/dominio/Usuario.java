@@ -49,7 +49,7 @@ public class Usuario {
 	public void addPL(PlayList lista) {
 		playlists.add(lista);
 	}
-	
+	//Busca entre todas las playlist si alguna tiene el nombre del parametro. Metodo auxiliar para las demas clases que necesitan encontrar una playlist en concreto
 	public PlayList buscarPL(String titulo) 
 	{
 		Optional<PlayList> optionalPlaylist = playlists.stream()
@@ -58,6 +58,7 @@ public class Usuario {
 		PlayList playlist = optionalPlaylist.orElse(null);
 		return playlist;
 	}
+	
 	public List<Cancion> cancionesLista (String nombre)
 	{
 		PlayList pl = this.buscarPL(nombre);
@@ -74,7 +75,7 @@ public class Usuario {
 	{
 		return desc.calcDescuento();
 	}
-	
+	//Comprueba que tipo de descuento asignar al usuario
 	public Descuento asignarDescuento() 
 	{
 		Period periodo = Period.between(fechaNacimiento, LocalDate.now());
@@ -83,7 +84,7 @@ public class Usuario {
 		else desc =new Descuento10dias();
 		return desc;
 	}
-	
+	//Metodos para gestionar una pl
 	public PlayList crearPl(String titulo) 
 	{	
 		PlayList pla = buscarPL(titulo);
@@ -120,25 +121,27 @@ public class Usuario {
 		pl.eliminarCancion(id);
 		return pl;
 	}
-	
+	//Duevuelve todas las canciones de una playlist
 	public List<Cancion> obtenerCanciones(String titulo)
 	{
 		PlayList pl = buscarPL(titulo);
 		return pl.getCanciones();
 	}
 	
+	//Duevuelve el nombre de las playlist del usuario
 	public List<String> nombrePl()
 	{
 		List<String> pl = getPlaylists().stream().map(p -> p.getNombre()).collect(Collectors.toList());
 		return pl;
 	}
-	
+	//Obtiene todas las canciones que estan dentro de alguna playlist y que no se repitan
 	public List<Cancion> cancionesPl()
 	{
 		List<Cancion> canciones = getPlaylists().stream().flatMap(pl -> pl.getCanciones().stream()).distinct().collect(Collectors.toList());
 		return canciones;
 	}
 	
+	//Crea un pdf ordenado segun las playlist y las canciones que tenga
 	public Document pdf(String ruta) throws FileNotFoundException, DocumentException {
 	    if (premium && !playlists.isEmpty()) {
 	        FileOutputStream archivo = new FileOutputStream(ruta + "/canciones.pdf");
@@ -172,7 +175,7 @@ public class Usuario {
 	    }
 	    return null;
 	}
-	
+	//Añade una cancion a recientes pero primero comprueba si ya estaba y si estaba la elimina y la pone al prinicipio y comprueba tambien que el tamaño no pasa de 10 (Tamaño maximo)
 	public void addCancionRecientes(Cancion c) 
 	{
 		Iterator<Cancion> iterator = recientes.iterator();

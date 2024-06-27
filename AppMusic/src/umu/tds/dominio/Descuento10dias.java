@@ -16,6 +16,7 @@ public class Descuento10dias implements Descuento {
 		fechaFinal = fechaActual.plusDays(diasParaFechaLimite);
 		
 	}
+	//Solo aplica el descuento si no han pasado los 10 dias de descuento
 	public double calcDescuento() {
 		if (fechaFinal.isAfter(LocalDate.now())) {
 			return Controlador.precio*DESCUENTOJOVENES;

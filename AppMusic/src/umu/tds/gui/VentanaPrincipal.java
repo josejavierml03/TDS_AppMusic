@@ -71,7 +71,7 @@ public class VentanaPrincipal implements IEncendidoListener {
 	public VentanaPrincipal() {
 		initialize();
 	}
-
+	//Evento del componente Luz para seleccionar el archivo para añadir las canciones nuevas
 	public void enteradoCambioEncendido(EventObject arg0) {
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.showOpenDialog(frmVentanaPrincipal);
@@ -115,7 +115,6 @@ public class VentanaPrincipal implements IEncendidoListener {
 			}
 		});
 	}
-
 
 	public void initialize() {
 
@@ -234,13 +233,13 @@ public class VentanaPrincipal implements IEncendidoListener {
 		JLabel lblNewLabel = new JLabel("Bienvenido, usuario.");
 		panel_2.add(lblNewLabel);
 
-		JButton btnNewButton_4 = new JButton("Logout");
+		JButton logout = new JButton("Logout");
 
-		panel_2.add(btnNewButton_4);
+		panel_2.add(logout);
 
-		JButton btnNewButton_5 = new JButton("Premium");
+		JButton premium = new JButton("Premium");
 
-		panel_2.add(btnNewButton_5);
+		panel_2.add(premium);
 
 		luz = new Luz();
 		panel_2.add(luz);
@@ -1140,7 +1139,7 @@ public class VentanaPrincipal implements IEncendidoListener {
 			}
 		});
 
-		btnNewButton_5.addActionListener(new ActionListener() {
+		premium.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
 				if (!Controlador.INSTANCE.comprobarPremium()) {
@@ -1155,13 +1154,14 @@ public class VentanaPrincipal implements IEncendidoListener {
 			}
 		});
 
-		btnNewButton_4.addActionListener(new ActionListener() {
+		logout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				LoginView pr = new LoginView();
 				pr.mostrarVentana();
 				frmVentanaPrincipal.dispose();
 			}
 		});
+		
 		luz.addEncendidoListener(this);
 		frmVentanaPrincipal.pack();
 		frmVentanaPrincipal.setLocationRelativeTo(null);

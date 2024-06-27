@@ -31,6 +31,7 @@ public enum RepositorioUsuarios {
 		}
 	}
 	
+	//Metodos para obtener los usuarios de diferentes formas
 	public List<Usuario> findUsuarios() throws DAOException {
 		return new LinkedList<Usuario>(usuariosPorLogin.values());
 	}

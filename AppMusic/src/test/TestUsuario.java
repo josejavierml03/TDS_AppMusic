@@ -100,7 +100,7 @@ public class TestUsuario {
 	@Test
 	public void crearPDF() throws FileNotFoundException, DocumentException 
 	{
-		Document d = usuario.pdf("./Escritorio");
+		Document d = usuario.pdf("C:\\Users\\juan3\\OneDrive\\Escritorio");
 		if (d == null) 
 		{
 			assertTrue(true);

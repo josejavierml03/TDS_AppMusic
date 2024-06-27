@@ -982,8 +982,8 @@ public class VentanaPrincipal implements IEncendidoListener {
 		        	if (ca!=null) {
 		        		canciones.add(ca);
 		        	}
-		        }else if (favoritas.isSelected()&& !titulo.getText().equals("") && !interprete.getText().equals("") && !estilo.getSelectedItem().equals("-")) {
-		        	Cancion ca = Controlador.INSTANCE.getCancionesTiInEsPl(titulo.getText(), interprete.getText(),estilo.getSelectedItem().toString());
+		        }else if (favoritas2.isSelected()&& !titulo2.getText().equals("") && !interprete2.getText().equals("") && !estilo2.getSelectedItem().equals("-")) {
+		        	Cancion ca = Controlador.INSTANCE.getCancionesTiInEsPl(titulo2.getText(), interprete2.getText(),estilo2.getSelectedItem().toString());
 		        	if (ca!=null) {
 		        		canciones.add(ca);
 		        	}

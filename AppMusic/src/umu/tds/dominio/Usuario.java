@@ -135,7 +135,7 @@ public class Usuario {
 	
 	public List<Cancion> cancionesPl()
 	{
-		List<Cancion> canciones = getPlaylists().stream().flatMap(pl -> pl.getCanciones().stream()).collect(Collectors.toList());
+		List<Cancion> canciones = getPlaylists().stream().flatMap(pl -> pl.getCanciones().stream()).distinct().collect(Collectors.toList());
 		return canciones;
 	}
 	

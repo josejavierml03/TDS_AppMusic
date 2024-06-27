@@ -169,11 +169,88 @@ INSTANCE;
 		List<Cancion> ca = canciones.stream().filter(c-> c.getTitulo().equals(titulo)).collect(Collectors.toList());
 		if (ca != null) 
 		{
-			return ca.stream().filter( cancion -> cancionesPl.contains(cancion)).collect(Collectors.toList());
+			LinkedList<Cancion> salida = new LinkedList<>();
+			for (Cancion c: ca) 
+			{
+				for (Cancion can : cancionesPl) 
+				{
+					if (c.getTitulo().equals(can.getTitulo()) && c.getInterprete().equals(can.getInterprete())) {
+						salida.add(c);
+					}
+				}
+			}
+			return salida;
 		
 		}
 		return null; 
 	}
+	
+	public List<Cancion> findEstiloyPlaylist(List<Cancion> cancionesPl , String estilo)
+	{
+		List<Cancion> ca = canciones.stream().filter(c->c.getEstilo().equals(estilo)).collect(Collectors.toList());
+		if (ca != null) 
+		{
+			LinkedList<Cancion> salida = new LinkedList<>();
+			for (Cancion c: ca) 
+			{
+				for (Cancion can : cancionesPl) 
+				{
+					if (c.getTitulo().equals(can.getTitulo()) && c.getInterprete().equals(can.getInterprete())) {
+						salida.add(c);
+					}
+				}
+			}
+			return salida;
+		
+		}
+		return null; 
+	}
+	
+	public List<Cancion> findInterpreteyPlaylist(List<Cancion> cancionesPl , String interprete)
+	{
+		List<Cancion> ca = canciones.stream().filter(c->c.getInterprete().equals(interprete))
+				.collect(Collectors.toList());
+		if (ca != null) 
+		{
+			LinkedList<Cancion> salida = new LinkedList<>();
+			for (Cancion c: ca) 
+			{
+				for (Cancion can : cancionesPl) 
+				{
+					if (c.getTitulo().equals(can.getTitulo()) && c.getInterprete().equals(can.getInterprete())) {
+						salida.add(c);
+					}
+				}
+			}
+			return salida;
+		
+		}
+		return null; 
+	}
+	
+	public List<Cancion> findInEsyPlaylist(List<Cancion> cancionesPl,String interprete,String estilo)
+	{
+		List<Cancion> ca = canciones.stream()
+	            .filter(c -> c.getInterprete().equals(interprete) && c.getEstilo().equals(estilo))
+	            .collect(Collectors.toList());   
+		if (ca != null) 
+		{
+			LinkedList<Cancion> salida = new LinkedList<>();
+			for (Cancion c: ca) 
+			{
+				for (Cancion can : cancionesPl) 
+				{
+					if (c.getTitulo().equals(can.getTitulo()) && c.getInterprete().equals(can.getInterprete())) {
+						salida.add(c);
+					}
+				}
+			}
+			return salida;
+		
+		}
+		return null; 
+	}
+	
 	
 	
 	//Añadir todos los find's playList

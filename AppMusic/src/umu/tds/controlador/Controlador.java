@@ -282,11 +282,30 @@ public enum Controlador implements PropertyChangeListener {
 		return RepositorioCanciones.INSTANCE.findEstiloyPlaylist(canciones,estilo);
 		
 	}
+	
 	public List<Cancion> getCancionesInEstiloPl(String interprete,String estilo)
 	{
 		List<Cancion> canciones = usuarioActual.cancionesPl();
 		return RepositorioCanciones.INSTANCE.findInEsyPlaylist(canciones,interprete,estilo);
 		
+	}
+	
+	public List<Cancion> getCancionesTiEstiloPl(String titulo,String estilo)
+	{
+		List<Cancion> canciones = usuarioActual.cancionesPl();
+		return RepositorioCanciones.INSTANCE.findTiEsyPlaylist(canciones,titulo,estilo);	
+	}
+	
+	public Cancion getCancionesTiInPl(String titulo,String interprete)
+	{
+		List<Cancion> canciones = usuarioActual.cancionesPl();
+		return RepositorioCanciones.INSTANCE.findTiInyPlaylist(canciones,titulo,interprete);	
+	}
+	
+	public Cancion getCancionesTiInEsPl(String titulo,String interprete,String estilo)
+	{
+		List<Cancion> canciones = usuarioActual.cancionesPl();
+		return RepositorioCanciones.INSTANCE.findTiInEsyPlaylist(canciones,titulo,interprete,estilo);	
 	}
 	
 	public List<Cancion> getFavs()

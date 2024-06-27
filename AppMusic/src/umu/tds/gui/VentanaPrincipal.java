@@ -837,6 +837,18 @@ public class VentanaPrincipal implements IEncendidoListener {
 		        	canciones = Controlador.INSTANCE.getCancionesInterpretePl(interprete.getText());
 		        }else if (favoritas.isSelected() && titulo.getText().equals("") && !interprete.getText().equals("") && !estilo.getSelectedItem().equals("-")) {
 		        	canciones = Controlador.INSTANCE.getCancionesInEstiloPl(interprete.getText(),estilo.getSelectedItem().toString());
+		        }else if (favoritas.isSelected() && !titulo.getText().equals("") && interprete.getText().equals("") && !estilo.getSelectedItem().equals("-")) {
+		        	canciones = Controlador.INSTANCE.getCancionesTiEstiloPl(titulo.getText(),estilo.getSelectedItem().toString());
+		        }else if (favoritas.isSelected()&& !titulo.getText().equals("") && !interprete.getText().equals("") && estilo.getSelectedItem().equals("-")) {
+		        	Cancion ca = Controlador.INSTANCE.getCancionesTiInPl(titulo.getText(), interprete.getText());
+		        	if (ca!=null) {
+		        		canciones.add(ca);
+		        	}
+		        }else if (favoritas.isSelected()&& !titulo.getText().equals("") && !interprete.getText().equals("") && !estilo.getSelectedItem().equals("-")) {
+		        	Cancion ca = Controlador.INSTANCE.getCancionesTiInEsPl(titulo.getText(), interprete.getText(),estilo.getSelectedItem().toString());
+		        	if (ca!=null) {
+		        		canciones.add(ca);
+		        	}
 		        }
 		        if(canciones != null) {
 			        for (Cancion cancion : canciones) {
@@ -964,6 +976,18 @@ public class VentanaPrincipal implements IEncendidoListener {
 		        	canciones = Controlador.INSTANCE.getCancionesInterpretePl(interprete2.getText());
 		        }else if (favoritas2.isSelected() && titulo2.getText().equals("") && !interprete2.getText().equals("") && !estilo2.getSelectedItem().equals("-")) {
 		        	canciones = Controlador.INSTANCE.getCancionesInEstiloPl(interprete2.getText(),estilo2.getSelectedItem().toString());
+		        }else if (favoritas2.isSelected() && !titulo2.getText().equals("") && interprete2.getText().equals("") && !estilo2.getSelectedItem().equals("-")) {
+		        	canciones = Controlador.INSTANCE.getCancionesTiEstiloPl(titulo2.getText(),estilo2.getSelectedItem().toString());
+		        }else if (favoritas2.isSelected()&& !titulo2.getText().equals("") && !interprete2.getText().equals("") && estilo2.getSelectedItem().equals("-")) {
+		        	Cancion ca = Controlador.INSTANCE.getCancionesTiInPl(titulo2.getText(), interprete2.getText());
+		        	if (ca!=null) {
+		        		canciones.add(ca);
+		        	}
+		        }else if (favoritas.isSelected()&& !titulo.getText().equals("") && !interprete.getText().equals("") && !estilo.getSelectedItem().equals("-")) {
+		        	Cancion ca = Controlador.INSTANCE.getCancionesTiInEsPl(titulo.getText(), interprete.getText(),estilo.getSelectedItem().toString());
+		        	if (ca!=null) {
+		        		canciones.add(ca);
+		        	}
 		        }
 		        if(canciones != null) {
 			        for (Cancion cancion : canciones) {

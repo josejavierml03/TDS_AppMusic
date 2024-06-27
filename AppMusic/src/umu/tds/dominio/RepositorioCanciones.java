@@ -251,6 +251,68 @@ INSTANCE;
 		return null; 
 	}
 	
+	public List<Cancion> findTiEsyPlaylist(List<Cancion> cancionesPl,String titulo,String estilo)
+	{
+		List<Cancion> ca = canciones.stream()
+	            .filter(c -> c.getTitulo().equals(titulo) && c.getEstilo().equals(estilo))
+	            .collect(Collectors.toList());   
+		if (ca != null) 
+		{
+			LinkedList<Cancion> salida = new LinkedList<>();
+			for (Cancion c: ca) 
+			{
+				for (Cancion can : cancionesPl) 
+				{
+					if (c.getTitulo().equals(can.getTitulo()) && c.getInterprete().equals(can.getInterprete())) {
+						salida.add(c);
+					}
+				}
+			}
+			return salida;
+		
+		}
+		return null; 
+	}
+	
+	public Cancion findTiInyPlaylist(List<Cancion> cancionesPl,String titulo,String interprete)
+	{
+		Cancion ca =canciones.stream()
+	            .filter(c -> c.getTitulo().equals(titulo)
+	             && c.getInterprete().equals(interprete))
+	            .findFirst()
+	            .orElse(null); 
+		if (ca != null) 
+		{
+				for (Cancion can : cancionesPl) 
+				{
+					if (ca.getTitulo().equals(can.getTitulo()) && ca.getInterprete().equals(can.getInterprete())) {
+						return ca;
+					}
+				}
+		}
+		return null; 
+	}
+	
+	public Cancion findTiInEsyPlaylist(List<Cancion> cancionesPl,String titulo,String interprete,String estilo)
+	{
+		Cancion ca =canciones.stream()
+	            .filter(c -> c.getTitulo().equals(titulo)
+	                    && c.getEstilo().equals(estilo)
+	                    && c.getInterprete().equals(interprete))
+	            .findFirst()
+	            .orElse(null);; 
+		if (ca != null) 
+		{
+				for (Cancion can : cancionesPl) 
+				{
+					if (ca.getTitulo().equals(can.getTitulo()) && ca.getInterprete().equals(can.getInterprete())) {
+						return ca;
+					}
+				}
+		}
+		return null; 
+	}
+	
 	
 	
 	//Añadir todos los find's playList
